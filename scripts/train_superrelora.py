@@ -8,15 +8,16 @@ from transformers import (
     AutoTokenizer,
     Trainer,
     TrainingArguments,
-    DataCollatorForLanguageModeling
+    DataCollatorForLanguageModeling,
+    AutoConfig
 )
 from datasets import load_dataset
 import yaml
 import os
 from tqdm import tqdm
 
-from superrelora.src.superrelora_model import SuperReLoRaModel
-from superrelora.src.utils import save_checkpoint, load_checkpoint
+from src.superrelora_model import SuperReLoRaModel
+from src.utils import save_checkpoint, load_checkpoint
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train SuperReLoRA model')
@@ -30,8 +31,12 @@ def load_config(config_path):
         return yaml.safe_load(f)
 
 def prepare_model_and_tokenizer(config):
-    # Load base model and tokenizer
-    model = AutoModelForCausalLM.from_pretrained(config['model_name'])
+    # Load model config from local file
+    model_config = AutoConfig.from_pretrained(config['model_config_path'])
+    model = AutoModelForCausalLM.from_pretrained(
+        config['model_name'],
+        config=model_config
+    )
     tokenizer = AutoTokenizer.from_pretrained(config['model_name'])
     
     # Wrap model with SuperReLoRA
@@ -39,7 +44,7 @@ def prepare_model_and_tokenizer(config):
         base_model=model,
         r=config['lora_r'],
         alpha=config['lora_alpha'],
-        merge_every=config['merge_every']
+        target_modules=config.get('target_modules', [])
     )
     
     return model, tokenizer

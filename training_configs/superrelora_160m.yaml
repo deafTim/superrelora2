@@ -1,5 +1,7 @@
 # Model configuration
-model_name: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"  # Base model to use
+model_name: "models/llama-250m"  # Path to local model weights directory
+model_config_path: "configs/llama_250m.json"  # Path to local config file
+
 dataset_name: "wikitext"  # Dataset to use for training
 
 # SuperReLoRA specific parameters

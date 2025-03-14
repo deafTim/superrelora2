@@ -1,8 +1,18 @@
 from transformers import AutoModelForCausalLM
 from src.superrelora_model import SuperReLoRaModel
 import torch
+import os
 
-base = AutoModelForCausalLM.from_pretrained("TinyLlama/TinyLlama-160M", torch_dtype=torch.float32)
+model_id = "nicholasKluge/TeenyTinyLlama-160m"
+cache_dir = "models/teenytinyllama-160m"
+
+# Always use HuggingFace Hub and cache locally
+base = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    torch_dtype=torch.float32,
+    cache_dir=cache_dir
+)
+
 model = SuperReLoRaModel(base, r=16, alpha=8, target_modules=["q_proj", "k_proj", "v_proj"])
 
 input_ids = torch.randint(0, base.config.vocab_size, (1, 16))
