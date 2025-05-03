@@ -3,6 +3,10 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -13,7 +17,6 @@ from transformers import (
 )
 from datasets import load_dataset
 import yaml
-import os
 from tqdm import tqdm
 
 from src.superrelora_model import SuperReLoRaModel
@@ -24,6 +27,11 @@ def parse_args():
     parser.add_argument('--config', type=str, required=True, help='Path to training config YAML')
     parser.add_argument('--use_trainer', action='store_true', help='Use HuggingFace Trainer')
     parser.add_argument('--output_dir', type=str, default='results', help='Output directory')
+    parser.add_argument('--merge_every', type=int, help='Steps between partial merges')
+    parser.add_argument('--merge_alpha', type=float, help='Merge coefficient alpha')
+    parser.add_argument('--max_steps', type=int, help='Maximum number of training steps')
+    parser.add_argument('--logging_steps', type=int, help='Logging steps')
+    parser.add_argument('--eval_steps', type=int, help='Evaluation steps')
     return parser.parse_args()
 
 def load_config(config_path):
@@ -31,12 +39,7 @@ def load_config(config_path):
         return yaml.safe_load(f)
 
 def prepare_model_and_tokenizer(config):
-    # Load model config from local file
-    model_config = AutoConfig.from_pretrained(config['model_config_path'])
-    model = AutoModelForCausalLM.from_pretrained(
-        config['model_name'],
-        config=model_config
-    )
+    model = AutoModelForCausalLM.from_pretrained(config['model_name'])
     tokenizer = AutoTokenizer.from_pretrained(config['model_name'])
     
     # Wrap model with SuperReLoRA
@@ -108,12 +111,16 @@ def train_manual(model, tokenizer, dataset, config, output_dir):
         shuffle=True
     )
     
+    log_path = os.path.join(output_dir, 'loss_log.csv')
+    with open(log_path, 'w') as f:
+        f.write('step,epoch,loss\n')
+    
     for epoch in range(config['num_epochs']):
         model.train()
         total_loss = 0
         
         progress_bar = tqdm(dataloader, desc=f'Epoch {epoch + 1}/{config["num_epochs"]}')
-        for batch in progress_bar:
+        for step, batch in enumerate(progress_bar):
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
             
@@ -131,6 +138,11 @@ def train_manual(model, tokenizer, dataset, config, output_dir):
             optimizer.zero_grad()
             
             progress_bar.set_postfix({'loss': loss.item()})
+            
+            # log to CSV
+            global_step = epoch * len(dataloader) + step
+            with open(log_path, 'a') as f:
+                f.write(f"{global_step},{epoch+1},{loss.item():.6f}\n")
         
         avg_loss = total_loss / len(dataloader)
         print(f'Epoch {epoch + 1} average loss: {avg_loss:.4f}')
@@ -162,6 +174,17 @@ def main():
         train_with_trainer(model, tokenizer, dataset, config, args.output_dir)
     else:
         train_manual(model, tokenizer, dataset, config, args.output_dir)
+
+    if args.merge_every is not None:
+        config['merge_every'] = args.merge_every
+    if args.merge_alpha is not None:
+        config['merge_alpha'] = args.merge_alpha
+    if args.max_steps is not None:
+        config['max_steps'] = args.max_steps
+    if args.logging_steps is not None:
+        config['logging_steps'] = args.logging_steps
+    if args.eval_steps is not None:
+        config['eval_steps'] = args.eval_steps
 
 if __name__ == '__main__':
     main() 

@@ -1,47 +1,47 @@
-# Model configuration
-model_name: "models/llama-250m"  # Path to local model weights directory
-model_config_path: "configs/llama_250m.json"  # Path to local config file
+# Model
+model_name: "nicholasKluge/TeenyTinyLlama-160m"
 
-dataset_name: "wikitext"  # Dataset to use for training
+# Dataset
+dataset_name: "wikitext"
+dataset_config: "wikitext-2-raw-v1"
 
-# SuperReLoRA specific parameters
-lora_r: 8  # Rank of LoRA decomposition
-lora_alpha: 16.0  # Scaling factor
-merge_every: 100  # Steps between partial merges
+# SuperReLoRA
+lora_r: 8
+lora_alpha: 16.0
+merge_every: 100
+merge_alpha: 0.1
 
-# Training parameters
+# Training
 num_epochs: 3
 batch_size: 8
+max_length: 512
 learning_rate: 2e-4
 weight_decay: 0.01
-max_length: 512  # Maximum sequence length
+gradient_accumulation_steps: 4
 
-# Optimizer parameters
+# Optimizer
 optimizer:
   type: "adamw"
   beta1: 0.9
   beta2: 0.999
   eps: 1e-8
 
-# Learning rate scheduler
+# Scheduler
 scheduler:
   type: "cosine"
   warmup_steps: 100
   total_steps: 1000
 
-# Logging and checkpointing
+# Precision
+fp16: true
+bf16: false
+
+# Logging
 logging_steps: 100
 save_steps: 1000
 eval_steps: 1000
 
-# Mixed precision training
-fp16: true
-bf16: false
-
-# Gradient accumulation
-gradient_accumulation_steps: 4
-
-# Target modules for LoRA
+# LoRA targets
 target_modules:
   - "q_proj"
   - "k_proj"
@@ -49,4 +49,4 @@ target_modules:
   - "o_proj"
   - "gate_proj"
   - "up_proj"
-  - "down_proj" 
+  - "down_proj"
