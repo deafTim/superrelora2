@@ -15,7 +15,7 @@ SuperReLoRA is an efficient fine-tuning method for large language models that co
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/superrelora.git
+git clone https://github.com/deafTim/superrelora2.git
 cd superrelora
 ```
 

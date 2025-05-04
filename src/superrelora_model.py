@@ -27,6 +27,7 @@ class SuperReLoRaModel(nn.Module):
 
     # ---------- replace Linear with SuperReLoRALinear ----------
     def _patch_linear_layers(self):
+        self.replaced_modules = []
         for name, module in self.model.named_modules():
             if not isinstance(module, nn.Linear):
                 continue
@@ -35,7 +36,10 @@ class SuperReLoRaModel(nn.Module):
 
             parent = self._get_parent(name)
             child_name = name.split(".")[-1]
-            old_linear: nn.Linear = getattr(parent, child_name)
+            old_linear = getattr(parent, child_name)
+
+            if isinstance(old_linear, SuperReLoRALinear):
+                continue  # skip if already replaced
 
             new_linear = SuperReLoRALinear(
                 in_f=old_linear.in_features,
@@ -50,6 +54,7 @@ class SuperReLoRaModel(nn.Module):
                 new_linear.bias.data.copy_(old_linear.bias.data)
 
             setattr(parent, child_name, new_linear)
+            self.replaced_modules.append(name)
 
     # helper to find parent module
     def _get_parent(self, module_name: str):
@@ -73,4 +78,19 @@ class SuperReLoRaModel(nn.Module):
         for module in self.model.modules():
             if isinstance(module, SuperReLoRALinear):
                 total_norm += module.partial_merge(merge_alpha, opt_state)
-        return total_norm 
+        return total_norm
+
+    @torch.no_grad()
+    def merge_all(self, alpha: float = 1.0, optimizer=None):
+        total_norm = 0.0
+        opt_state = optimizer.state if optimizer is not None else None
+        for module in self.model.modules():
+            if isinstance(module, SuperReLoRALinear):
+                total_norm += module.partial_merge(alpha, opt_state)
+        return total_norm
+
+    @torch.no_grad()
+    def unmerge_all(self):
+        for module in self.model.modules():
+            if isinstance(module, SuperReLoRALinear):
+                module.unmerge() 
