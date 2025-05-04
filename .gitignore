@@ -50,3 +50,4 @@ env/
 .Trashes
 ehthumbs.db
 Thumbs.db
+/debug_results
