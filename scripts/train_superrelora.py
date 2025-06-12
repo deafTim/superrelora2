@@ -202,6 +202,11 @@ def main():
     model, tokenizer = prepare_model_and_tokenizer(config)
     dataset = prepare_dataset(config, tokenizer)
 
+    print("✅ CUDA available:", torch.cuda.is_available())
+    print("✅ Device:", torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    print("✅ Model dtype:", next(model.parameters()).dtype)
+    print("✅ Model device:", next(model.parameters()).device)
+
     # Train model
     if args.use_trainer:
         train_with_trainer(model, tokenizer, dataset, config, args.output_dir)
