@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Set environment variables
+export CUDA_VISIBLE_DEVICES=0
+export TOKENIZERS_PARALLELISM=false
+
+# Run evaluation
+python scripts/eval_superrelora.py \
+    --model_path results/final_model.pt \
+    --dataset_name wikitext \
+    --dataset_config wikitext-2-raw-v1 \
+    --batch_size 8 \
+    --max_length 128 \
+    --num_samples 1000 
