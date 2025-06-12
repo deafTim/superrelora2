@@ -1,3 +1,6 @@
+import os
+os.environ["WANDB_MODE"] = "disabled"
+
 import argparse
 import torch
 import torch.nn as nn
