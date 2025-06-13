@@ -101,7 +101,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📉 Training Loss (TensorBoard)
 
-![Training Loss](results/TensorBoardLoss.png)
+![Training Loss](TensorBoardLoss.png)
 
 
 ## 📊 Evaluation Results
