@@ -1,0 +1,164 @@
+/home/jupyter/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py:896: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Some weights of LlamaForCausalLM were not initialized from the model checkpoint at nicholasKluge/TeenyTinyLlama-160m and are newly initialized: ['model.layers.2.self_attn.rotary_emb.inv_freq', 'model.layers.6.self_attn.rotary_emb.inv_freq', 'model.layers.1.self_attn.rotary_emb.inv_freq', 'model.layers.9.self_attn.rotary_emb.inv_freq', 'model.layers.5.self_attn.rotary_emb.inv_freq', 'model.layers.10.self_attn.rotary_emb.inv_freq', 'model.layers.3.self_attn.rotary_emb.inv_freq', 'model.layers.4.self_attn.rotary_emb.inv_freq', 'model.layers.11.self_attn.rotary_emb.inv_freq', 'model.layers.7.self_attn.rotary_emb.inv_freq', 'model.layers.8.self_attn.rotary_emb.inv_freq', 'model.layers.0.self_attn.rotary_emb.inv_freq']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/jupyter/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py:896: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+
+Using device: cpu
+
+Loading base model and tokenizer...
+Model loaded successfully!
+
+Loading dataset...
+Dataset loaded with 100 examples
+
+Tokenizing dataset...
+Tokenization complete!
+Created dataloader with 7 batches
+
+Starting metrics computation...
+
+Starting evaluation on 7 batches...
+Computing metrics:   0%|          | 0/7 [00:00<?, ?it/s]Computing metrics:  14%|█▍        | 1/7 [00:01<00:09,  1.61s/it]Computing metrics:  29%|██▊       | 2/7 [00:03<00:08,  1.61s/it]Computing metrics:  43%|████▎     | 3/7 [00:04<00:06,  1.58s/it]Computing metrics:  57%|█████▋    | 4/7 [00:06<00:04,  1.58s/it]Computing metrics:  71%|███████▏  | 5/7 [00:07<00:03,  1.60s/it]Computing metrics:  86%|████████▌ | 6/7 [00:09<00:01,  1.59s/it]Computing metrics: 100%|██████████| 7/7 [00:09<00:00,  1.21s/it]Computing metrics: 100%|██████████| 7/7 [00:09<00:00,  1.43s/it]
+Both `max_new_tokens` (=1024) and `max_length`(=100) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+2025-06-13 01:31:59.336434: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Both `max_new_tokens` (=1024) and `max_length`(=100) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Processing batch 1/7
+Batch shape: torch.Size([64, 16])
+Batch 1 - Loss: 13.9887, Accuracy: 0.0396
+
+Processing batch 2/7
+Batch shape: torch.Size([64, 16])
+Batch 2 - Loss: 13.7634, Accuracy: 0.0269
+
+Processing batch 3/7
+Batch shape: torch.Size([64, 16])
+Batch 3 - Loss: 14.8297, Accuracy: 0.0318
+
+Processing batch 4/7
+Batch shape: torch.Size([64, 16])
+Batch 4 - Loss: 13.8601, Accuracy: 0.0250
+
+Processing batch 5/7
+Batch shape: torch.Size([64, 16])
+Batch 5 - Loss: 14.9590, Accuracy: 0.0302
+
+Processing batch 6/7
+Batch shape: torch.Size([64, 16])
+Batch 6 - Loss: 17.2007, Accuracy: 0.0571
+
+Processing batch 7/7
+Batch shape: torch.Size([64, 4])
+Batch 7 - Loss: 16.2797, Accuracy: 0.0260
+
+Evaluation complete!
+Total tokens processed: 2868
+Total correct predictions: 93
+
+Base Model Metrics (Quick Evaluation):
+Loss: 2.3404
+Perplexity: 10.39
+Accuracy: 0.0324
+
+Generating example texts:
+
+Prompt: Once upon a time
+Generated: Once upon a time I don't have to go through him! I found that people who knew as they are looking for those of what it done else. But if you'll be an involved things about, however we got to get to your own because more you do not send you up and make sure right on someone will not receive your course.
+You need this account? You can start allow you interesting at a list of winners from the state of São Paulo: The best friends from Brazil: Tânia Côrtes - www.tania.com.br/entrevistas/enjoeiza-outoro-sobre-o-filantropo.html
+I like my name is Marcia Bittencourt e eu estamos de volta! Hoje é um dia para você: nós queremos te encontrar com a gente no Instagram @mariabettencio em @marica_br/#facebook #amadododatafashion
+Aproveite seu aniversário com essa super novidade que vai deixar sua casa ainda mais linda!
+Tenha uma semana cheia de sonhos e felicidade!
+Quer saber como foi? Sabemos que cada pessoa tem algo único na vida e que precisa ser valorizado por quem amamos e ama!
+Como é a nossa rotina diária? Nosso corpo está sempre no rumo certo E esse planejamento pode ajudar muito em nosso dia a dia. Por isso criamos este guia 100% completo para cuidar melhor da sua saúde e também ficar bem em forma.
+Um dos nossos grandes diferenciais são os nossos exercícios físicos. É claro que nem todo mundo vive sem correr atrás da grana – mas nada melhor que ter um pouco de malhação para conseguir atingir esses resultados. Não é? Então assista ao vídeo abaixo!
+Veja abaixo algumas dicas:
+1° O primeiro passo para começar a fazer seus abdominais corretamente é:
+Emagrecer! Para emagrecer não basta apenas eliminar gorduras, existem inúmeros alimentos ricos em proteína como a carne, peixes, ovos, entre outros.
+Você pode comer muitas frutas e ver alguns vídeos ensinando de acordo com suas rotinas diárias. Um desses exemplos é o pimentão vermelho
+2° A recomendação de você mesmo antes de iniciar o treino é tomar bastante água antes, pois ela ajuda a reduzir os níveis de glicose no sangue, ajudando a controlar o açúcar no sangue.
+3° Se você quer perder peso rápido, tome o café da manhã todos os dias durante pelo menos três dias. Quando estiver pronto, escolha alimentos saudáveis ​​para o período.
+4° Você deve evitar alimentos que contenham cafeína ou álcool, pois eles podem causar insônia e prejudicar a qualidade de sono.
+5° Procure uma alimentação equilibrada e balanceada em todas as refeições. Faça um cardápio adaptado à idade e faça o check-up nutricional adequado.
+Pense no seu corpo perfeito! Faça exercício físico de intensidade moderada ou leve pra qualquer lugar. Tente exercitar-se regularmente, porque a sensação que fica é realmente incrível!
+Você sabia que quanto maior a frequência, maior será a chance de alcançar aquela barriga saudável?
+Separamos aqui 5 exercícios que ajudam a queimar calorias! Veja abaixo!
+Massagem no Body Brilho: Aprenda a Fazer Massagens Regulares para Emagrecedores!
+8 Dicas de Exercícios para Perder Barriga – Melhora Visceral na Pele
+9 Exercício Físico – Como Treinar o Corpo Ativo
+27 Melhores Exercícios para Perder Gordura Estômago
+A musculação é uma das atividades mais populares e praticadas quando falamos de perda muscular. Além disso, ela contribui fortemente para mantermos a massa magra, aumentando assim as chances de recuperarmos os músculos perdidos.
+O processo de treinamento intenso aliado aos exercícios físicos estimulam diretamente no sistema imunológico, melhorando a capacidade física e mental. Assim, você melhora a força e o condicionamento físico, além de aumentar a resistência cardiovascular.
+Além disso, uma dieta bem balanceada, rica em frutas, legumes. Além de garantir a manutenção dos músculos, ele auxilia na saciedade e promove a produção de colágeno tipo 3.
+Portanto, é necessário praticar atividade física, principalmente para ganhar massa muscular, sendo importante conhecer diversos benefícios do produto e buscar orientação médica.
+É comum ouvirmos falar sobre ganho de peso. Mas afinal, o que é isso? Esse termo significa ganhos de massa, que é o aumento de energia proporcionado pela dieta, especialmente para pessoas que já estão acima do peso.
+Para melhorar a performance geral, é fundamental consumir proteínas boas e gorduras saudáveis, com baixo teor calórico. Com isso, você poderá acelerar e intensificar essas funções.
+Já os carboidratos precisam passar pelos processos fisiológicos, além de serem fontes importantes de energia, dessa forma, irão contribuir para a diminuição dos triglicerídeos.
+A ingestão adequada de alimentos ricos em vitamina C, minerais como ferro, cálcio e vitaminas do complexo B, permite que a perda de massa seja benéfica para o organismo humano.
+Mas tudo isso só acaba acontecendo quando nos referimos a algum alimento extremamente fibroso! Para entender mais sobre isso, continue lendo esse artigo!
+O QUE É FERRAMENTA DE DADOS PARA A PERDA
+--------------------------------------------------
+
+Prompt: The most important thing about
+Generated: The most important thing about the same that it is, you see that she was very good for the little girl. I have always been doing to find a full peek (and I'm not a girl, but or now) and some of the parties. It's worst thing, we are looking here in cleaning all we can play with the best as one of the main strengths that will make something more on which many times soons. The greatest rewarding from the christmas newspaper has come back of their people and will continue anything. She's unemployed by those younger people, her gay poets, lady kim, messy, jimmy everything right down at the time.
+You've got takes, before the days would be fitting in the second time.
+Tags:
+the oldest
+link do post
+comentar
+favorito
+Sexta-feira, 5 de Dezembro de 2010
+Novo filme chega aos cinemas em Julho
+por Nuno Lopes
+A nova longa-metragem de Angélica, "Animal", conta com uma história que vai muito para além das aparências.
+Ana Gomes nasceu numa família musical mas foi criada na música depois dos 20 anos quando conheceu o actor Daniel Carvalho.
+Depois de ter passado pelos palcos ao longo dos anos, Angélica entrou para os estúdios da TVI durante um ano e meio, após fazer o seu primeiro filme, em 2003, para uma produtora independente.
+O filme tem em cena diversos atores famosos, como Lurdes, Ana Gomes, Maria João Pinho, Pedro Sampaio, entre outros.
+Uma vez mais, tudo começa bem com uma banda sonora fantástica, composta por Tiago Santos e Bruno Tavares (que não estão mais incluídos no elenco), que toca sempre nos temas mais marcantes.
+"Animal" é uma produção do canal Multishow, a mais famosa emissora portuguesa.
+Em "Big Brother", temos a participação especial de Sofia Biblioteca. No papel da mulher perfeita, há ainda pela frente nomes como Diogo Faria, Teresa Guilherme, Luís Miguel Moura, Hugo Mota, Raquel Ribeiro, Sara Matias, Catarina Malhoa e também a própria Angélica. A direção está a cargo de Paulo Branco, editado e distribuído pelo próprio canal.
+A trama recai sobre um casal que resolve casar-se com uma jovem que sofre no casamento da sua melhor amiga – com quem mantém uma relação romântica.
+O filme estreia-se já esta semana nos cinemas portugueses, nos mesmos moldes dos anteriores filmes "O Caso dos Dinossauros"
+(Em Portugal, "Argo" será exibido pela primeira vez à(s) 23:30)
+por Nuno Lopes
+O cinema português vai passar pelas salas portuguesas entre hoje e sexta-feira, às 14h, no Cinema São Jorge, a partir das 21h30. Para assistir basta clicar aqui.
+Local: Cine Teatro S. Jorge
+Pode descarregar gratuitamente o trailer deste filme online em http://www.filmesdomigueladoco.pt/index.php?title=Angelicia.html
+Em Portugal: Mais informações em http://www.filme.pt/noticias/film/10-anos-de-ano-jovem-e-apresenta-lista-de-vencedores-da-pre-mil-fãs-em-sociedade/n12096168199_48_4394444063.pdf
+Etiquetas:
+abril 2008
+publicado às 23:52
+link do post
+comentar
+favorito
+Sábado, 4 de Novembro de 2009
+Casamento à porta de casa
+por Nuno Lopes
+Para ler mais dicas e vídeos do blog de Nuno Lopes, clique AQUI. E siga-nos nas redes sociais :
+Mateus Micaela
+(Fotografia - Fotos Públicas)
+Assunto: Casamentos_Portugueses_portuguesas
+Última edição por Nuno Lopes em Sex Jul 04, 2011 3:13 pm, editado 1 vez(es)
+Publicada por Pedro Filipe Silva
+Portugal: Um Amor Sem Fim
+No dia 26 de Maio de 2009, a Revista Sábado publicou a entrevista a este autor:
+Esta publicação mostra-me um pouco pouco da minha vida, uma vez que sou muito jovem. Em meados de Outubro o meu pai faleceu e, desde então, tenho feito vários projectos e estou empenhado. Estou ansiosa pelo casamento e espero poder estar presente no novo lar para me ajudar a desenvolver essa paixão tão especial. Como disse anteriormente, tenho muita sorte em realizar os meus sonhos!
+Mas acho que a maior responsabilidade desta pessoa é ser feliz e ter uma vida feliz.
+Agradeço-te imenso e pedi-te muitas felicidades, pois sou uma pessoa abençoada. Obrigado!
+por Nuno Lopes
+Opinião
+Blogger
+Vida Pessoal
+Idioma Português (Português)
+E-mail
+Imprimir
+Comentários (6)
+Estudos Literários
+Dicas de Leitura Online
+Sofia Mezzo | Estagiário de Artes Gráficas
+Rui Alves | Estagiário de Artistas Visuais
+Doutorado em Fotojornalismo pela Universidade Nova de Lisboa (UniLisboa).
+Colaborador assíduo do Blog da Isabel Oliveira.
+RT @SkillsClub
+--------------------------------------------------

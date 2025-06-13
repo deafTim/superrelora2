@@ -97,3 +97,18 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details. 
+
+
+## 📉 Training Loss (TensorBoard)
+
+![Training Loss](results/TensorBoardLoss.png)
+
+
+## 📊 Evaluation Results
+
+| Model             | Prompts | Accuracy | Perplexity | Final Loss |
+|------------------|---------|----------|------------|-------------|
+| Base (160M)       | 1000    | 0.0324   | 10.39      | 2.34        |
+| SuperReLoRA (160M)| 1000    | 0.0412   | 8.95       | 2.10        |
+
+*Quick evaluation on Wikitext-2-raw-v1, max_length=64, batch_size=16*

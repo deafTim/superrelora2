@@ -1,0 +1,1214 @@
+/home/jupyter/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py:896: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Some weights of LlamaForCausalLM were not initialized from the model checkpoint at nicholasKluge/TeenyTinyLlama-160m and are newly initialized: ['model.layers.9.self_attn.rotary_emb.inv_freq', 'model.layers.4.self_attn.rotary_emb.inv_freq', 'model.layers.6.self_attn.rotary_emb.inv_freq', 'model.layers.10.self_attn.rotary_emb.inv_freq', 'model.layers.11.self_attn.rotary_emb.inv_freq', 'model.layers.3.self_attn.rotary_emb.inv_freq', 'model.layers.0.self_attn.rotary_emb.inv_freq', 'model.layers.2.self_attn.rotary_emb.inv_freq', 'model.layers.8.self_attn.rotary_emb.inv_freq', 'model.layers.7.self_attn.rotary_emb.inv_freq', 'model.layers.5.self_attn.rotary_emb.inv_freq', 'model.layers.1.self_attn.rotary_emb.inv_freq']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/jupyter/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py:896: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Loading model and tokenizer...
+Checkpoint keys: ['model.model.embed_tokens.weight', 'model.model.layers.0.self_attn.q_proj.weight', 'model.model.layers.0.self_attn.q_proj.lora_A.weight', 'model.model.layers.0.self_attn.q_proj.lora_B.weight', 'model.model.layers.0.self_attn.k_proj.weight', 'model.model.layers.0.self_attn.k_proj.lora_A.weight', 'model.model.layers.0.self_attn.k_proj.lora_B.weight', 'model.model.layers.0.self_attn.v_proj.weight', 'model.model.layers.0.self_attn.v_proj.lora_A.weight', 'model.model.layers.0.self_attn.v_proj.lora_B.weight']
+Model state_dict keys: ['model.model.embed_tokens.weight', 'model.model.layers.0.self_attn.q_proj.weight', 'model.model.layers.0.self_attn.q_proj.lora_A.weight', 'model.model.layers.0.self_attn.q_proj.lora_B.weight', 'model.model.layers.0.self_attn.k_proj.weight', 'model.model.layers.0.self_attn.k_proj.lora_A.weight', 'model.model.layers.0.self_attn.k_proj.lora_B.weight', 'model.model.layers.0.self_attn.v_proj.weight', 'model.model.layers.0.self_attn.v_proj.lora_A.weight', 'model.model.layers.0.self_attn.v_proj.lora_B.weight']
+Loading dataset...
+Computing metrics...
+
+Starting evaluation on 125 batches...
+Computing metrics:   0%|          | 0/125 [00:00<?, ?it/s]Computing metrics:   1%|          | 1/125 [00:01<04:05,  1.98s/it]Computing metrics:   2%|▏         | 2/125 [00:03<03:50,  1.88s/it]Computing metrics:   2%|▏         | 3/125 [00:05<03:44,  1.84s/it]Computing metrics:   3%|▎         | 4/125 [00:07<03:37,  1.79s/it]Computing metrics:   4%|▍         | 5/125 [00:09<03:32,  1.77s/it]Computing metrics:   5%|▍         | 6/125 [00:10<03:29,  1.76s/it]Computing metrics:   6%|▌         | 7/125 [00:12<03:26,  1.75s/it]Computing metrics:   6%|▋         | 8/125 [00:14<03:24,  1.75s/it]Computing metrics:   7%|▋         | 9/125 [00:15<03:21,  1.74s/it]Computing metrics:   8%|▊         | 10/125 [00:17<03:18,  1.72s/it]Computing metrics:   9%|▉         | 11/125 [00:19<03:15,  1.72s/it]Computing metrics:  10%|▉         | 12/125 [00:21<03:17,  1.75s/it]Computing metrics:  10%|█         | 13/125 [00:22<03:14,  1.74s/it]Computing metrics:  11%|█         | 14/125 [00:24<03:10,  1.71s/it]Computing metrics:  12%|█▏        | 15/125 [00:26<03:08,  1.71s/it]Computing metrics:  13%|█▎        | 16/125 [00:27<03:05,  1.70s/it]Computing metrics:  14%|█▎        | 17/125 [00:29<03:03,  1.70s/it]Computing metrics:  14%|█▍        | 18/125 [00:31<03:03,  1.72s/it]Computing metrics:  15%|█▌        | 19/125 [00:33<03:03,  1.73s/it]Computing metrics:  16%|█▌        | 20/125 [00:34<02:59,  1.71s/it]Computing metrics:  17%|█▋        | 21/125 [00:36<02:58,  1.72s/it]Computing metrics:  18%|█▊        | 22/125 [00:38<02:56,  1.71s/it]Computing metrics:  18%|█▊        | 23/125 [00:39<02:54,  1.71s/it]Computing metrics:  19%|█▉        | 24/125 [00:41<02:51,  1.70s/it]Computing metrics:  20%|██        | 25/125 [00:43<02:53,  1.73s/it]Computing metrics:  21%|██        | 26/125 [00:45<02:53,  1.76s/it]Computing metrics:  22%|██▏       | 27/125 [00:46<02:49,  1.73s/it]Computing metrics:  22%|██▏       | 28/125 [00:48<02:48,  1.73s/it]Computing metrics:  23%|██▎       | 29/125 [00:50<02:47,  1.74s/it]Computing metrics:  24%|██▍       | 30/125 [00:52<02:47,  1.76s/it]Computing metrics:  25%|██▍       | 31/125 [00:54<02:47,  1.79s/it]Computing metrics:  26%|██▌       | 32/125 [00:55<02:45,  1.78s/it]Computing metrics:  26%|██▋       | 33/125 [00:57<02:48,  1.83s/it]Computing metrics:  27%|██▋       | 34/125 [00:59<02:42,  1.78s/it]Computing metrics:  28%|██▊       | 35/125 [01:01<02:38,  1.76s/it]Computing metrics:  29%|██▉       | 36/125 [01:02<02:36,  1.76s/it]Computing metrics:  30%|██▉       | 37/125 [01:04<02:35,  1.77s/it]Computing metrics:  30%|███       | 38/125 [01:06<02:33,  1.76s/it]Computing metrics:  31%|███       | 39/125 [01:08<02:30,  1.75s/it]Computing metrics:  32%|███▏      | 40/125 [01:09<02:28,  1.75s/it]Computing metrics:  33%|███▎      | 41/125 [01:11<02:27,  1.75s/it]Computing metrics:  34%|███▎      | 42/125 [01:13<02:25,  1.76s/it]Computing metrics:  34%|███▍      | 43/125 [01:15<02:25,  1.78s/it]Computing metrics:  35%|███▌      | 44/125 [01:17<02:25,  1.79s/it]Computing metrics:  36%|███▌      | 45/125 [01:18<02:23,  1.79s/it]Computing metrics:  37%|███▋      | 46/125 [01:20<02:21,  1.79s/it]Computing metrics:  38%|███▊      | 47/125 [01:22<02:18,  1.77s/it]Computing metrics:  38%|███▊      | 48/125 [01:24<02:17,  1.78s/it]Computing metrics:  39%|███▉      | 49/125 [01:25<02:13,  1.75s/it]Computing metrics:  40%|████      | 50/125 [01:27<02:10,  1.74s/it]Computing metrics:  41%|████      | 51/125 [01:29<02:08,  1.74s/it]Computing metrics:  42%|████▏     | 52/125 [01:31<02:07,  1.74s/it]Computing metrics:  42%|████▏     | 53/125 [01:32<02:05,  1.74s/it]Computing metrics:  43%|████▎     | 54/125 [01:34<02:02,  1.72s/it]Computing metrics:  44%|████▍     | 55/125 [01:36<02:00,  1.72s/it]Computing metrics:  45%|████▍     | 56/125 [01:37<01:59,  1.73s/it]Computing metrics:  46%|████▌     | 57/125 [01:39<01:57,  1.72s/it]Computing metrics:  46%|████▋     | 58/125 [01:41<01:56,  1.73s/it]Computing metrics:  47%|████▋     | 59/125 [01:43<01:55,  1.74s/it]Computing metrics:  48%|████▊     | 60/125 [01:45<01:53,  1.75s/it]Computing metrics:  49%|████▉     | 61/125 [01:46<01:52,  1.76s/it]Computing metrics:  50%|████▉     | 62/125 [01:48<01:51,  1.77s/it]Computing metrics:  50%|█████     | 63/125 [01:50<01:49,  1.76s/it]Computing metrics:  51%|█████     | 64/125 [01:52<01:47,  1.77s/it]Computing metrics:  52%|█████▏    | 65/125 [01:53<01:45,  1.76s/it]Computing metrics:  53%|█████▎    | 66/125 [01:55<01:43,  1.75s/it]Computing metrics:  54%|█████▎    | 67/125 [01:57<01:42,  1.76s/it]Computing metrics:  54%|█████▍    | 68/125 [01:59<01:39,  1.75s/it]Computing metrics:  55%|█████▌    | 69/125 [02:00<01:37,  1.75s/it]Computing metrics:  56%|█████▌    | 70/125 [02:02<01:36,  1.75s/it]Computing metrics:  57%|█████▋    | 71/125 [02:04<01:34,  1.76s/it]Computing metrics:  58%|█████▊    | 72/125 [02:06<01:33,  1.76s/it]Computing metrics:  58%|█████▊    | 73/125 [02:07<01:31,  1.76s/it]Computing metrics:  59%|█████▉    | 74/125 [02:09<01:29,  1.75s/it]Computing metrics:  60%|██████    | 75/125 [02:11<01:27,  1.74s/it]Computing metrics:  61%|██████    | 76/125 [02:13<01:24,  1.73s/it]Computing metrics:  62%|██████▏   | 77/125 [02:14<01:22,  1.72s/it]Computing metrics:  62%|██████▏   | 78/125 [02:16<01:20,  1.72s/it]Computing metrics:  63%|██████▎   | 79/125 [02:18<01:18,  1.70s/it]Computing metrics:  64%|██████▍   | 80/125 [02:19<01:17,  1.71s/it]Computing metrics:  65%|██████▍   | 81/125 [02:21<01:15,  1.73s/it]Computing metrics:  66%|██████▌   | 82/125 [02:23<01:14,  1.73s/it]Computing metrics:  66%|██████▋   | 83/125 [02:24<01:11,  1.71s/it]Computing metrics:  67%|██████▋   | 84/125 [02:26<01:10,  1.72s/it]Computing metrics:  68%|██████▊   | 85/125 [02:28<01:08,  1.71s/it]Computing metrics:  69%|██████▉   | 86/125 [02:30<01:06,  1.70s/it]Computing metrics:  70%|██████▉   | 87/125 [02:31<01:05,  1.72s/it]Computing metrics:  70%|███████   | 88/125 [02:33<01:04,  1.74s/it]Computing metrics:  71%|███████   | 89/125 [02:35<01:02,  1.74s/it]Computing metrics:  72%|███████▏  | 90/125 [02:37<01:00,  1.73s/it]Computing metrics:  73%|███████▎  | 91/125 [02:38<00:59,  1.74s/it]Computing metrics:  74%|███████▎  | 92/125 [02:40<00:58,  1.76s/it]Computing metrics:  74%|███████▍  | 93/125 [02:42<00:56,  1.76s/it]Computing metrics:  75%|███████▌  | 94/125 [02:44<00:54,  1.75s/it]Computing metrics:  76%|███████▌  | 95/125 [02:45<00:52,  1.74s/it]Computing metrics:  77%|███████▋  | 96/125 [02:47<00:51,  1.76s/it]Computing metrics:  78%|███████▊  | 97/125 [02:49<00:49,  1.77s/it]Computing metrics:  78%|███████▊  | 98/125 [02:51<00:47,  1.77s/it]Computing metrics:  79%|███████▉  | 99/125 [02:53<00:46,  1.77s/it]Computing metrics:  80%|████████  | 100/125 [02:54<00:43,  1.76s/it]Computing metrics:  81%|████████  | 101/125 [02:56<00:42,  1.76s/it]Computing metrics:  82%|████████▏ | 102/125 [02:58<00:40,  1.76s/it]Computing metrics:  82%|████████▏ | 103/125 [03:00<00:38,  1.75s/it]Computing metrics:  83%|████████▎ | 104/125 [03:01<00:36,  1.76s/it]Computing metrics:  84%|████████▍ | 105/125 [03:03<00:34,  1.74s/it]Computing metrics:  85%|████████▍ | 106/125 [03:05<00:32,  1.72s/it]Computing metrics:  86%|████████▌ | 107/125 [03:06<00:30,  1.71s/it]Computing metrics:  86%|████████▋ | 108/125 [03:08<00:28,  1.69s/it]Computing metrics:  87%|████████▋ | 109/125 [03:10<00:26,  1.68s/it]Computing metrics:  88%|████████▊ | 110/125 [03:11<00:25,  1.67s/it]Computing metrics:  89%|████████▉ | 111/125 [03:13<00:23,  1.67s/it]Computing metrics:  90%|████████▉ | 112/125 [03:15<00:22,  1.70s/it]Computing metrics:  90%|█████████ | 113/125 [03:17<00:20,  1.73s/it]Computing metrics:  91%|█████████ | 114/125 [03:18<00:19,  1.74s/it]Computing metrics:  92%|█████████▏| 115/125 [03:20<00:17,  1.71s/it]Computing metrics:  93%|█████████▎| 116/125 [03:22<00:15,  1.72s/it]Computing metrics:  94%|█████████▎| 117/125 [03:23<00:13,  1.72s/it]Computing metrics:  94%|█████████▍| 118/125 [03:25<00:12,  1.72s/it]Computing metrics:  95%|█████████▌| 119/125 [03:27<00:10,  1.71s/it]Computing metrics:  96%|█████████▌| 120/125 [03:29<00:08,  1.72s/it]Computing metrics:  97%|█████████▋| 121/125 [03:30<00:06,  1.73s/it]Computing metrics:  98%|█████████▊| 122/125 [03:32<00:05,  1.71s/it]Computing metrics:  98%|█████████▊| 123/125 [03:34<00:03,  1.69s/it]Computing metrics:  99%|█████████▉| 124/125 [03:35<00:01,  1.67s/it]Computing metrics: 100%|██████████| 125/125 [03:37<00:00,  1.66s/it]Computing metrics: 100%|██████████| 125/125 [03:37<00:00,  1.74s/it]
+Both `max_new_tokens` (=1024) and `max_length`(=100) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+2025-06-13 10:18:17.567934: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Both `max_new_tokens` (=1024) and `max_length`(=100) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+Both `max_new_tokens` (=1024) and `max_length`(=100) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+Processing batch 1/125
+Batch shape: torch.Size([128, 8])
+Batch 1 - Loss: 41.5045, Accuracy: 0.0179
+
+Processing batch 2/125
+Batch shape: torch.Size([128, 8])
+Batch 2 - Loss: 26.0451, Accuracy: 0.0236
+
+Processing batch 3/125
+Batch shape: torch.Size([128, 8])
+Batch 3 - Loss: 19.6204, Accuracy: 0.0134
+
+Processing batch 4/125
+Batch shape: torch.Size([128, 8])
+Batch 4 - Loss: 30.1579, Accuracy: 0.0213
+
+Processing batch 5/125
+Batch shape: torch.Size([128, 8])
+Batch 5 - Loss: 28.2504, Accuracy: 0.0160
+
+Processing batch 6/125
+Batch shape: torch.Size([128, 8])
+Batch 6 - Loss: 29.3726, Accuracy: 0.0136
+
+Processing batch 7/125
+Batch shape: torch.Size([128, 8])
+Batch 7 - Loss: 19.7305, Accuracy: 0.0171
+
+Processing batch 8/125
+Batch shape: torch.Size([128, 8])
+Batch 8 - Loss: 33.7863, Accuracy: 0.0153
+
+Processing batch 9/125
+Batch shape: torch.Size([128, 8])
+Batch 9 - Loss: 19.3075, Accuracy: 0.0168
+
+Processing batch 10/125
+Batch shape: torch.Size([128, 8])
+Batch 10 - Loss: 45.7537, Accuracy: 0.0286
+
+Processing batch 11/125
+Batch shape: torch.Size([128, 8])
+Batch 11 - Loss: 36.3220, Accuracy: 0.0180
+
+Processing batch 12/125
+Batch shape: torch.Size([128, 8])
+Batch 12 - Loss: 35.0044, Accuracy: 0.0550
+
+Processing batch 13/125
+Batch shape: torch.Size([128, 8])
+Batch 13 - Loss: 25.4298, Accuracy: 0.0258
+
+Processing batch 14/125
+Batch shape: torch.Size([128, 8])
+Batch 14 - Loss: 21.3248, Accuracy: 0.0150
+
+Processing batch 15/125
+Batch shape: torch.Size([128, 8])
+Batch 15 - Loss: 30.3279, Accuracy: 0.0150
+
+Processing batch 16/125
+Batch shape: torch.Size([128, 8])
+Batch 16 - Loss: 28.9356, Accuracy: 0.0175
+
+Processing batch 17/125
+Batch shape: torch.Size([128, 8])
+Batch 17 - Loss: 21.2631, Accuracy: 0.0208
+
+Processing batch 18/125
+Batch shape: torch.Size([128, 8])
+Batch 18 - Loss: 19.3775, Accuracy: 0.0102
+
+Processing batch 19/125
+Batch shape: torch.Size([128, 8])
+Batch 19 - Loss: 14.4848, Accuracy: 0.0156
+
+Processing batch 20/125
+Batch shape: torch.Size([128, 8])
+Batch 20 - Loss: 19.1824, Accuracy: 0.0202
+
+Processing batch 21/125
+Batch shape: torch.Size([128, 8])
+Batch 21 - Loss: 26.6424, Accuracy: 0.0167
+
+Processing batch 22/125
+Batch shape: torch.Size([128, 8])
+Batch 22 - Loss: 18.5094, Accuracy: 0.0283
+
+Processing batch 23/125
+Batch shape: torch.Size([128, 8])
+Batch 23 - Loss: 19.8205, Accuracy: 0.0105
+
+Processing batch 24/125
+Batch shape: torch.Size([128, 8])
+Batch 24 - Loss: 19.6703, Accuracy: 0.0157
+
+Processing batch 25/125
+Batch shape: torch.Size([128, 8])
+Batch 25 - Loss: 21.4022, Accuracy: 0.0151
+
+Processing batch 26/125
+Batch shape: torch.Size([128, 8])
+Batch 26 - Loss: 20.4288, Accuracy: 0.0172
+
+Processing batch 27/125
+Batch shape: torch.Size([128, 8])
+Batch 27 - Loss: 14.6325, Accuracy: 0.0156
+
+Processing batch 28/125
+Batch shape: torch.Size([128, 8])
+Batch 28 - Loss: 41.3085, Accuracy: 0.0144
+
+Processing batch 29/125
+Batch shape: torch.Size([128, 8])
+Batch 29 - Loss: 17.6579, Accuracy: 0.0169
+
+Processing batch 30/125
+Batch shape: torch.Size([128, 8])
+Batch 30 - Loss: 19.3668, Accuracy: 0.0115
+
+Processing batch 31/125
+Batch shape: torch.Size([128, 8])
+Batch 31 - Loss: 41.6710, Accuracy: 0.0180
+
+Processing batch 32/125
+Batch shape: torch.Size([128, 8])
+Batch 32 - Loss: 51.2929, Accuracy: 0.0420
+
+Processing batch 33/125
+Batch shape: torch.Size([128, 8])
+Batch 33 - Loss: 18.9353, Accuracy: 0.0312
+
+Processing batch 34/125
+Batch shape: torch.Size([128, 8])
+Batch 34 - Loss: 37.2382, Accuracy: 0.0217
+
+Processing batch 35/125
+Batch shape: torch.Size([128, 8])
+Batch 35 - Loss: 19.7070, Accuracy: 0.0192
+
+Processing batch 36/125
+Batch shape: torch.Size([128, 8])
+Batch 36 - Loss: 51.8563, Accuracy: 0.0656
+
+Processing batch 37/125
+Batch shape: torch.Size([128, 8])
+Batch 37 - Loss: 25.2691, Accuracy: 0.0496
+
+Processing batch 38/125
+Batch shape: torch.Size([128, 8])
+Batch 38 - Loss: 20.8436, Accuracy: 0.0337
+
+Processing batch 39/125
+Batch shape: torch.Size([128, 8])
+Batch 39 - Loss: 28.6698, Accuracy: 0.0309
+
+Processing batch 40/125
+Batch shape: torch.Size([128, 8])
+Batch 40 - Loss: 25.4345, Accuracy: 0.0177
+
+Processing batch 41/125
+Batch shape: torch.Size([128, 8])
+Batch 41 - Loss: 36.3858, Accuracy: 0.0293
+
+Processing batch 42/125
+Batch shape: torch.Size([128, 8])
+Batch 42 - Loss: 22.8720, Accuracy: 0.0610
+
+Processing batch 43/125
+Batch shape: torch.Size([128, 8])
+Batch 43 - Loss: 25.8036, Accuracy: 0.0256
+
+Processing batch 44/125
+Batch shape: torch.Size([128, 8])
+Batch 44 - Loss: 27.2408, Accuracy: 0.0118
+
+Processing batch 45/125
+Batch shape: torch.Size([128, 8])
+Batch 45 - Loss: 23.3880, Accuracy: 0.0175
+
+Processing batch 46/125
+Batch shape: torch.Size([128, 8])
+Batch 46 - Loss: 23.0326, Accuracy: 0.0126
+
+Processing batch 47/125
+Batch shape: torch.Size([128, 8])
+Batch 47 - Loss: 33.6623, Accuracy: 0.0138
+
+Processing batch 48/125
+Batch shape: torch.Size([128, 8])
+Batch 48 - Loss: 41.5483, Accuracy: 0.0211
+
+Processing batch 49/125
+Batch shape: torch.Size([128, 8])
+Batch 49 - Loss: 22.0399, Accuracy: 0.0278
+
+Processing batch 50/125
+Batch shape: torch.Size([128, 8])
+Batch 50 - Loss: 51.1686, Accuracy: 0.0287
+
+Processing batch 51/125
+Batch shape: torch.Size([128, 8])
+Batch 51 - Loss: 18.8925, Accuracy: 0.0133
+
+Processing batch 52/125
+Batch shape: torch.Size([128, 8])
+Batch 52 - Loss: 27.1999, Accuracy: 0.0455
+
+Processing batch 53/125
+Batch shape: torch.Size([128, 8])
+Batch 53 - Loss: 21.6233, Accuracy: 0.0417
+
+Processing batch 54/125
+Batch shape: torch.Size([128, 8])
+Batch 54 - Loss: 42.7281, Accuracy: 0.0176
+
+Processing batch 55/125
+Batch shape: torch.Size([128, 8])
+Batch 55 - Loss: 32.0079, Accuracy: 0.0194
+
+Processing batch 56/125
+Batch shape: torch.Size([128, 8])
+Batch 56 - Loss: 20.3078, Accuracy: 0.0155
+
+Processing batch 57/125
+Batch shape: torch.Size([128, 8])
+Batch 57 - Loss: 36.4153, Accuracy: 0.0179
+
+Processing batch 58/125
+Batch shape: torch.Size([128, 8])
+Batch 58 - Loss: 21.2244, Accuracy: 0.0179
+
+Processing batch 59/125
+Batch shape: torch.Size([128, 8])
+Batch 59 - Loss: 23.3585, Accuracy: 0.0273
+
+Processing batch 60/125
+Batch shape: torch.Size([128, 8])
+Batch 60 - Loss: 19.3793, Accuracy: 0.0095
+
+Processing batch 61/125
+Batch shape: torch.Size([128, 8])
+Batch 61 - Loss: 22.1920, Accuracy: 0.0323
+
+Processing batch 62/125
+Batch shape: torch.Size([128, 8])
+Batch 62 - Loss: 52.4729, Accuracy: 0.0256
+
+Processing batch 63/125
+Batch shape: torch.Size([128, 8])
+Batch 63 - Loss: 42.1956, Accuracy: 0.0387
+
+Processing batch 64/125
+Batch shape: torch.Size([128, 8])
+Batch 64 - Loss: 43.5021, Accuracy: 0.0226
+
+Processing batch 65/125
+Batch shape: torch.Size([128, 8])
+Batch 65 - Loss: 41.2879, Accuracy: 0.0174
+
+Processing batch 66/125
+Batch shape: torch.Size([128, 8])
+Batch 66 - Loss: 41.2981, Accuracy: 0.0209
+
+Processing batch 67/125
+Batch shape: torch.Size([128, 8])
+Batch 67 - Loss: 43.5612, Accuracy: 0.0153
+
+Processing batch 68/125
+Batch shape: torch.Size([128, 8])
+Batch 68 - Loss: 40.9701, Accuracy: 0.0244
+
+Processing batch 69/125
+Batch shape: torch.Size([128, 8])
+Batch 69 - Loss: 42.2815, Accuracy: 0.0201
+
+Processing batch 70/125
+Batch shape: torch.Size([128, 8])
+Batch 70 - Loss: 52.6574, Accuracy: 0.0256
+
+Processing batch 71/125
+Batch shape: torch.Size([128, 8])
+Batch 71 - Loss: 19.0955, Accuracy: 0.0152
+
+Processing batch 72/125
+Batch shape: torch.Size([128, 8])
+Batch 72 - Loss: 42.1797, Accuracy: 0.0244
+
+Processing batch 73/125
+Batch shape: torch.Size([128, 8])
+Batch 73 - Loss: 24.4994, Accuracy: 0.0145
+
+Processing batch 74/125
+Batch shape: torch.Size([128, 8])
+Batch 74 - Loss: 19.9850, Accuracy: 0.0159
+
+Processing batch 75/125
+Batch shape: torch.Size([128, 8])
+Batch 75 - Loss: 18.9778, Accuracy: 0.0210
+
+Processing batch 76/125
+Batch shape: torch.Size([128, 8])
+Batch 76 - Loss: 27.5912, Accuracy: 0.0100
+
+Processing batch 77/125
+Batch shape: torch.Size([128, 8])
+Batch 77 - Loss: 22.4428, Accuracy: 0.0201
+
+Processing batch 78/125
+Batch shape: torch.Size([128, 8])
+Batch 78 - Loss: 35.2284, Accuracy: 0.0152
+
+Processing batch 79/125
+Batch shape: torch.Size([128, 8])
+Batch 79 - Loss: 22.4742, Accuracy: 0.0177
+
+Processing batch 80/125
+Batch shape: torch.Size([128, 8])
+Batch 80 - Loss: 22.1282, Accuracy: 0.0209
+
+Processing batch 81/125
+Batch shape: torch.Size([128, 8])
+Batch 81 - Loss: 12.0736, Accuracy: 0.1047
+
+Processing batch 82/125
+Batch shape: torch.Size([128, 8])
+Batch 82 - Loss: 12.6004, Accuracy: 0.1014
+
+Processing batch 83/125
+Batch shape: torch.Size([128, 8])
+Batch 83 - Loss: 12.8323, Accuracy: 0.0800
+
+Processing batch 84/125
+Batch shape: torch.Size([128, 8])
+Batch 84 - Loss: 27.9094, Accuracy: 0.0149
+
+Processing batch 85/125
+Batch shape: torch.Size([128, 8])
+Batch 85 - Loss: 35.1039, Accuracy: 0.0276
+
+Processing batch 86/125
+Batch shape: torch.Size([128, 8])
+Batch 86 - Loss: 23.2821, Accuracy: 0.0156
+
+Processing batch 87/125
+Batch shape: torch.Size([128, 8])
+Batch 87 - Loss: 46.3775, Accuracy: 0.0338
+
+Processing batch 88/125
+Batch shape: torch.Size([128, 8])
+Batch 88 - Loss: 19.0883, Accuracy: 0.0210
+
+Processing batch 89/125
+Batch shape: torch.Size([128, 8])
+Batch 89 - Loss: 24.6371, Accuracy: 0.0255
+
+Processing batch 90/125
+Batch shape: torch.Size([128, 8])
+Batch 90 - Loss: 18.9036, Accuracy: 0.0210
+
+Processing batch 91/125
+Batch shape: torch.Size([128, 8])
+Batch 91 - Loss: 17.4700, Accuracy: 0.0153
+
+Processing batch 92/125
+Batch shape: torch.Size([128, 8])
+Batch 92 - Loss: 18.4704, Accuracy: 0.0164
+
+Processing batch 93/125
+Batch shape: torch.Size([128, 8])
+Batch 93 - Loss: 24.9373, Accuracy: 0.0189
+
+Processing batch 94/125
+Batch shape: torch.Size([128, 8])
+Batch 94 - Loss: 26.2023, Accuracy: 0.0581
+
+Processing batch 95/125
+Batch shape: torch.Size([128, 8])
+Batch 95 - Loss: 14.6860, Accuracy: 0.1000
+
+Processing batch 96/125
+Batch shape: torch.Size([128, 8])
+Batch 96 - Loss: 19.3658, Accuracy: 0.0210
+
+Processing batch 97/125
+Batch shape: torch.Size([128, 8])
+Batch 97 - Loss: 18.8905, Accuracy: 0.0210
+
+Processing batch 98/125
+Batch shape: torch.Size([128, 8])
+Batch 98 - Loss: 20.9945, Accuracy: 0.0192
+
+Processing batch 99/125
+Batch shape: torch.Size([128, 8])
+Batch 99 - Loss: 37.0683, Accuracy: 0.0185
+
+Processing batch 100/125
+Batch shape: torch.Size([128, 8])
+Batch 100 - Loss: 22.4727, Accuracy: 0.0151
+
+Processing batch 101/125
+Batch shape: torch.Size([128, 8])
+Batch 101 - Loss: 24.1869, Accuracy: 0.0140
+
+Processing batch 102/125
+Batch shape: torch.Size([128, 8])
+Batch 102 - Loss: 24.0608, Accuracy: 0.0153
+
+Processing batch 103/125
+Batch shape: torch.Size([128, 8])
+Batch 103 - Loss: 39.4812, Accuracy: 0.0195
+
+Processing batch 104/125
+Batch shape: torch.Size([128, 8])
+Batch 104 - Loss: 38.8453, Accuracy: 0.0217
+
+Processing batch 105/125
+Batch shape: torch.Size([128, 8])
+Batch 105 - Loss: 39.1002, Accuracy: 0.0110
+
+Processing batch 106/125
+Batch shape: torch.Size([128, 8])
+Batch 106 - Loss: 25.5789, Accuracy: 0.0157
+
+Processing batch 107/125
+Batch shape: torch.Size([128, 8])
+Batch 107 - Loss: 32.0410, Accuracy: 0.0178
+
+Processing batch 108/125
+Batch shape: torch.Size([128, 8])
+Batch 108 - Loss: 19.1877, Accuracy: 0.0227
+
+Processing batch 109/125
+Batch shape: torch.Size([128, 8])
+Batch 109 - Loss: 35.2678, Accuracy: 0.0101
+
+Processing batch 110/125
+Batch shape: torch.Size([128, 8])
+Batch 110 - Loss: 28.0705, Accuracy: 0.0189
+
+Processing batch 111/125
+Batch shape: torch.Size([128, 8])
+Batch 111 - Loss: 32.0728, Accuracy: 0.0204
+
+Processing batch 112/125
+Batch shape: torch.Size([128, 8])
+Batch 112 - Loss: 31.7721, Accuracy: 0.0532
+
+Processing batch 113/125
+Batch shape: torch.Size([128, 8])
+Batch 113 - Loss: 17.7542, Accuracy: 0.0169
+
+Processing batch 114/125
+Batch shape: torch.Size([128, 8])
+Batch 114 - Loss: 13.8716, Accuracy: 0.1136
+
+Processing batch 115/125
+Batch shape: torch.Size([128, 8])
+Batch 115 - Loss: 49.5083, Accuracy: 0.0246
+
+Processing batch 116/125
+Batch shape: torch.Size([128, 8])
+Batch 116 - Loss: 13.6769, Accuracy: 0.0753
+
+Processing batch 117/125
+Batch shape: torch.Size([128, 8])
+Batch 117 - Loss: 13.0711, Accuracy: 0.0842
+
+Processing batch 118/125
+Batch shape: torch.Size([128, 8])
+Batch 118 - Loss: 12.1983, Accuracy: 0.1800
+
+Processing batch 119/125
+Batch shape: torch.Size([128, 8])
+Batch 119 - Loss: 21.7919, Accuracy: 0.0205
+
+Processing batch 120/125
+Batch shape: torch.Size([128, 8])
+Batch 120 - Loss: 37.0991, Accuracy: 0.0182
+
+Processing batch 121/125
+Batch shape: torch.Size([128, 8])
+Batch 121 - Loss: 24.2093, Accuracy: 0.0133
+
+Processing batch 122/125
+Batch shape: torch.Size([128, 8])
+Batch 122 - Loss: 20.4193, Accuracy: 0.0179
+
+Processing batch 123/125
+Batch shape: torch.Size([128, 8])
+Batch 123 - Loss: 41.2223, Accuracy: 0.0266
+
+Processing batch 124/125
+Batch shape: torch.Size([128, 8])
+Batch 124 - Loss: 23.5062, Accuracy: 0.0101
+
+Processing batch 125/125
+Batch shape: torch.Size([128, 8])
+Batch 125 - Loss: 30.6299, Accuracy: 0.0101
+
+Evaluation complete!
+Total tokens processed: 43263
+Total correct predictions: 855
+
+SuperReLoRA Model Metrics:
+Loss: 10.2808
+Perplexity: 29166.98
+Accuracy: 0.0198
+
+Generating example texts:
+
+Prompt: Once upon a time
+Generated: Once upon a time , there would be a first two @-@ game games in the series . On July 13 , 2013 , the team 's only goal for their next 2 – 0 victory against Australia was defeated by Australia 3 – 1 , and the season began to have just been the last day of its successor . The following week , both one side and all three teams were goals losses at Wembley Stadium , but the other final game went shortlisted ; a few players became chosen as they had no goals like him , others seemed to have any problems . In his 15th international career , Scotland winner Tormra Fylde entered the season with the record fifteen , and appeared that they " should look like the best coaches you know ... [ ... ] I 'm not funny about that , so I don 't know what ' happens . " 
+  For this feature , Scotland won the 2010 – 2011 season when they joined the All Blacks from the Eastern League through Liverpool in the semi @-@ final and finished in the Premier League since 2000 . They made 1 @.@ 03 GW number overs along with Real Madrid and Manchester United in the semi @-@ finals , winning the Cup Final in 2009 . 
+ After the 2013 FIFA World Cup system , they sent back to Wales , where their home defense was unable to support a football match in England with the former guard Derby County team head @-@ to @-@ head coach Trent Richardson . It also returned to England to start a midfield on 12 August 2015 . 
+ Following the 2016 UEFA EUROCOM / FA Cup qualifying competition in the final games , they finish in the quarter @-@ final , everyth place after an 8 – 4 defeat of Ireland . 
+ For the remainder of their 2013 FIFA World Cup title , Scotland later started manager Stephen Bannister initially . After the run , they decided to give the team the fourth strike out of the table , tied their tackles against Spain and England before going into the first round of the regular season . 
+ While a total of 16 games , Scotland gave their first game , though the fans felt the goals exposed during the fight caused they offer . This scout was awarded to Scotland 's first home campaign in the second half of the year . 
+ 
+ Attempt after reaching the league , they moved to Switzerland where they spent three games under Scotland wins , while Welsh 's ownership of the clubs were sent back to England but was fulfilled by the Svensk Police Department . 
+ 
+ Around 2014 , Scotland 's first Premier League triple Championship victory over Notts Round about 28 – 5 . 
+ 
+ 
+ 
+ In June 2015 , Scotland won the season with the record fifth in position , and topped the fourth time in division , with the seventh remaining offseason and west ending of the Football League Trophy : 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+Prompt: The most important thing about
+Generated: The most important thing about the role of Mr Beeton was to be a good one that appeared " only in the same style , but just more founded " . In 1846 , at a conclusion about what made it worse as the book 's father had believed to have her " a body and pinkness " that here was a bitter greater idea — either as that he had lost and orchestrally beliked and soon and reminiscent of the English poem " The Tree of Life " . 
+ Mr Beeton 's works include The Books of Poetry ( 1848 ) , The Gospel of Sixteen Years ( 1882 ) and Burying with Words ( 1886 ) , in which he felt a greeish and very highly influenced composition ; both instances would be combined from Etty 's other works of degree by the court . 
+ Etty 's works includes the poetic and prophetic use of symbolism ; his philosophical structure is inducted intactly , with the creation of anything of children 's common aspects as many as they are above . 
+ The use of symbolic elements for practice of publicity causes Mr Beeton to choose these elements and even though practices can also be uncertain ; he has not been abridged by means of being used to refer to all elements of poetry . 
+ Hector Berlioz and her work contains the difficulties of the poem . There are some excavations of the concept of the word ' s ' , whereas the symbolic story of the songs may be of a great confusion ; the description of a woman should find nothing – it was not unknown if the symbolic motif was usually done to be before becoming available under the name Mr Beeton . 
+ Lessons for Poets : A Surveying Methodis . De Gruyter ( 1891 ) , 372 pages , pp. 425 – 483 
+ The language of the Book of Poesias . Oxford University Press ( 1963 ) . 
+ The book has become popular amongst the late English poets . 
+ FRELIMO : Memoria para la Lengua Portuguesa. Madrid ( 1999 ) 
+ 
+ 
+ NUNCKING : Unorthodox Truth . New York State Library ( 2007 ) 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ CANON : Manuscripts of anagramas . Edwin Creutz ( 1972 ) 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+Prompt: In the future, artificial intelligence will
+Generated: In the future, artificial intelligence will have a sense of decision . The human reason is that we cannot be acknowledged and then we kill down experiences , including the language and accommodation of human readers . And only these were both strongly ethniccalised social environmental conditions understanding " speech " and inattendings by the intake @-@ views of individuals such as people , human mutilations , or other persons such as male manias , physical disorders , or homosexuality are generally difficult for use , as well as more reliable to others such as psychologists , archaeologists , educational teachers and public artists . 
+When the human leads is not enough to come out on all their odds , it is impossible if they seem to continue to get whatever any realistic characters . While a human development is necessary to prevent different developments in much of man 's world , it is unique involved with human interaction . If these reasons are unwanted , no consequently human interest may cause even more confidentness at because of this one has failed . 
+Indonesian intellectual and sociological committee are found . 
+I.I.Y. – Comparison of interdictions between craft and human relief : 
+I .I. – Some problems occurred from a few scientific desires to a ground . 
+II .I.I. – A self @-@ defense of human health . 
+III .H.I. – Humane trends and human intelligence . 
+IV .H.I. – Human ability and individuality . 
+V.I.I. – Human exploration and human interactive ; 
+VI - Human coaching and human interativism ; 
+V II.E.I. – Human intelligence ; 
+VI III.B.I. – Human interaction . 
+IX..I.I. – Human intelligence , through human intelligence , 
+X.I.I.I. – Human intelligence 
+XI.I.I.I.I. – Human intelligence 
+Problema 1 – Ora and Out ( Interdisciplinary tactic of emotional sensory ) 
+1. I.S.I. I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.
+
+2. I.S.O.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.
+
+3. I.S.O.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.
+
+4. I.S.O.I.I.I.I.I.I.I.I.I.I...." 
+4. IV.SR.II.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I." 
+5. V.I.I.I.i.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I 
+
+6. E.U.A.C.I.P.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I . 
+7. B.UNICEFI.D. – Social impacts rather behavioral and burial issues 
+8. B.UNCIDED – Rediscovery and solidifying solutions 
+9. A.NASTIOLA R.H.R.I.A.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I . 
+10. A.REPAVELIA . 
+11. ALINELLA G. DE S. D.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I 
+12. TATOMIR K. ML.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I.I 
+13. GABRIEL LOPES PEREIRA. 
+
