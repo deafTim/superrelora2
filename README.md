@@ -99,6 +99,21 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 This project is licensed under the MIT License - see the LICENSE file for details. 
 
 
+## 🧪 Experiment Details
+
+- **Base Model:** `nicholasKluge/TeenyTinyLlama-160M`
+- **Dataset:** `wikitext-2-raw-v1` (train split only)
+- **Prompts for evaluation:** 1000
+- **Max token length:** 64
+- **Training epochs:** 3
+- **Batch size:** 64
+- **LoRA rank (`r`):** 8
+- **LoRA alpha:** 16
+- **Merge strategy:** α-merge every 500 steps (α = 0.1)
+- **Training mode:** HuggingFace `Trainer`
+- **Device:** NVIDIA A100 (40 GB), single-GPU
+- **Precision:** bfloat16
+
 ## 📉 Training Loss (TensorBoard)
 
 ![Training Loss](TensorBoardLoss.png)
