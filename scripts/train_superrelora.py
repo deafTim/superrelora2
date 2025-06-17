@@ -38,23 +38,53 @@ def parse_args():
     parser.add_argument('--batch_size', type=int, help='Batch size')
     parser.add_argument('--num_epochs', type=int, help='Number of epochs')
     parser.add_argument('--limit_train_examples', type=int, help='Limit number of training examples (for debug)')
+    parser.add_argument('--use_base_model', action='store_true', help='Use raw base model without SuperReLoRA')
     return parser.parse_args()
 
 def load_config(config_path):
     with open(config_path, 'r') as f:
         return yaml.safe_load(f)
 
-def prepare_model_and_tokenizer(config):
+def prepare_model_and_tokenizer(config, use_base_model=False):
     model = AutoModelForCausalLM.from_pretrained(config['model_name'])
     tokenizer = AutoTokenizer.from_pretrained(config['model_name'])
+
+    if not use_base_model:
+        model = SuperReLoRaModel(
+            base_model=model,
+            r=config['lora_r'],
+            alpha=config['lora_alpha'],
+            target_modules=config.get('target_modules', [])
+        )
+
+    return model, tokenizer
+
+def prepare_model_and_tokenizer(config, use_base_model=False):
+    ...
+    if use_base_model:
+        model = AutoModelForCausalLM.from_pretrained(config["model_name"])
+    else:
+        base = AutoModelForCausalLM.from_pretrained(config["model_name"])
+        model = SuperReLoRaModel(base, ...)
+
+        
+
+def prepare_model_and_tokenizer(config, use_base_model=False):
+    tokenizer = AutoTokenizer.from_pretrained(config['model_name'])
+    if use_base_model:
+        model = AutoModelForCausalLM.from_pretrained(config["model_name"])
     
-    # Wrap model with SuperReLoRA
-    model = SuperReLoRaModel(
-        base_model=model,
-        r=config['lora_r'],
-        alpha=config['lora_alpha'],
-        target_modules=config.get('target_modules', [])
-    )
+    else:
+        # Wrap model with SuperReLoRA
+        base = AutoModelForCausalLM.from_pretrained(config["model_name"])
+        model = SuperReLoRaModel(
+            base_model=base,
+            r=config['lora_r'],
+            alpha=config['lora_alpha'],
+            target_modules=config.get('target_modules', [])
+        )
+        
+    
     
     return model, tokenizer
 
@@ -180,6 +210,7 @@ def main():
     # Переопределяем параметры из аргументов КОМАНДНОЙ СТРОКИ до вызова prepare_dataset!
     if args.merge_every is not None:
         config['merge_every'] = args.merge_every
+        
     if args.merge_alpha is not None:
         config['merge_alpha'] = args.merge_alpha
     if args.max_steps is not None:
@@ -199,7 +230,8 @@ def main():
     os.makedirs(args.output_dir, exist_ok=True)
 
     # Prepare model and dataset
-    model, tokenizer = prepare_model_and_tokenizer(config)
+    model, tokenizer = prepare_model_and_tokenizer(config, use_base_model=args.use_base_model)
+
     dataset = prepare_dataset(config, tokenizer)
 
     print("✅ CUDA available:", torch.cuda.is_available())

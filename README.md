@@ -114,16 +114,32 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Device:** NVIDIA A100 (40 GB), single-GPU
 - **Precision:** bfloat16
 
+
+
 ## 📉 Training Loss (TensorBoard)
 
-![Training Loss](TensorBoardLoss.png)
+<table>
+  <tr>
+    <td align="center"><b>SuperReLoRA</b></td>
+    <td align="center"><b>Full Fine-Tuning</b></td>
+  </tr>
+  <tr>
+    <td><img src="TensorBoardLoss_Super.png" width="400"></td>
+    <td><img src="TensorBoardLoss_Full.png" width="400"></td>
+  </tr>
+</table>
 
+## 📊 Evaluation Results (Wikitext-2-raw-v1, max_length=64, batch_size=16)
 
-## 📊 Evaluation Results
+| Model               | Accuracy | Perplexity | Final Loss |
+|--------------------|----------|------------|-------------|
+| Not-trained (160M) | 0.0352   | 9.63       | 2.2649      |
+| SuperReLoRA (160M) | 0.0198   | 29166.98   | 10.2808     |
+| Full Fine-Tuned (160M)    | 0.0197   | 29430.45   | 10.2898     |
 
-| Model             | Prompts | Accuracy | Perplexity | Final Loss |
-|------------------|---------|----------|------------|-------------|
-| Base (160M)       | 1000    | 0.0324   | 10.39      | 2.34        |
-| SuperReLoRA (160M)| 1000    | 0.0412   | 8.95       | 2.10        |
+## ⏱️ Training Summary
 
-*Quick evaluation on Wikitext-2-raw-v1, max_length=64, batch_size=16*
+| Model               | Train Loss | Runtime (s) | Steps/s | Samples/s |
+|--------------------|------------|-------------|---------|------------|
+| SuperReLoRA (160M) | 2.7725     | 3888.98     | 0.443   | 28.325     |
+| Full Fine-Tuned    | 2.7726     | 3897.23     | 0.442   | 28.265     |
