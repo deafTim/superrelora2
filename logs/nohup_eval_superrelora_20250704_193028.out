@@ -1,0 +1,25 @@
+/home/jupyter/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py:896: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Some weights of LlamaForCausalLM were not initialized from the model checkpoint at nicholasKluge/TeenyTinyLlama-160m and are newly initialized: ['model.layers.6.self_attn.rotary_emb.inv_freq', 'model.layers.2.self_attn.rotary_emb.inv_freq', 'model.layers.4.self_attn.rotary_emb.inv_freq', 'model.layers.9.self_attn.rotary_emb.inv_freq', 'model.layers.8.self_attn.rotary_emb.inv_freq', 'model.layers.3.self_attn.rotary_emb.inv_freq', 'model.layers.10.self_attn.rotary_emb.inv_freq', 'model.layers.1.self_attn.rotary_emb.inv_freq', 'model.layers.5.self_attn.rotary_emb.inv_freq', 'model.layers.11.self_attn.rotary_emb.inv_freq', 'model.layers.7.self_attn.rotary_emb.inv_freq', 'model.layers.0.self_attn.rotary_emb.inv_freq']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/home/jupyter/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py:896: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Loading model and tokenizer...
+Checkpoint keys: ['model.model.embed_tokens.weight', 'model.model.layers.0.self_attn.q_proj.weight', 'model.model.layers.0.self_attn.q_proj.lora_A.weight', 'model.model.layers.0.self_attn.q_proj.lora_B.weight', 'model.model.layers.0.self_attn.k_proj.weight', 'model.model.layers.0.self_attn.k_proj.lora_A.weight', 'model.model.layers.0.self_attn.k_proj.lora_B.weight', 'model.model.layers.0.self_attn.v_proj.weight', 'model.model.layers.0.self_attn.v_proj.lora_A.weight', 'model.model.layers.0.self_attn.v_proj.lora_B.weight']
+Model state_dict keys: ['model.model.embed_tokens.weight', 'model.model.layers.0.self_attn.q_proj.weight', 'model.model.layers.0.self_attn.q_proj.lora_A.weight', 'model.model.layers.0.self_attn.q_proj.lora_B.weight', 'model.model.layers.0.self_attn.k_proj.weight', 'model.model.layers.0.self_attn.k_proj.lora_A.weight', 'model.model.layers.0.self_attn.k_proj.lora_B.weight', 'model.model.layers.0.self_attn.v_proj.weight', 'model.model.layers.0.self_attn.v_proj.lora_A.weight', 'model.model.layers.0.self_attn.v_proj.lora_B.weight']
+Loading dataset...
+Computing metrics...
+
+Starting evaluation on 125 batches...
+Computing metrics:   0%|          | 0/125 [00:00<?, ?it/s]Computing metrics:   0%|          | 0/125 [00:00<?, ?it/s]
+
+Processing batch 1/125
+Batch shape: torch.Size([128, 8])
+Traceback (most recent call last):
+  File "/home/jupyter/work/resources/superrelora2/scripts/eval_superrelora.py", line 195, in <module>
+    main() 
+  File "/home/jupyter/work/resources/superrelora2/scripts/eval_superrelora.py", line 175, in main
+    loss, perplexity, accuracy = compute_perplexity(model, dataloader, device)
+  File "/home/jupyter/work/resources/superrelora2/scripts/eval_superrelora.py", line 67, in compute_perplexity
+    token_count = mask.sum().item()
+UnboundLocalError: local variable 'mask' referenced before assignment

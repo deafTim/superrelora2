@@ -60,21 +60,27 @@ def compute_perplexity(model, dataloader, device):
             )
             
             loss = outputs.loss
-            total_loss += loss.item() * input_ids.size(0)
             
+            mask = attention_mask[:, 1:].contiguous()
+            # число предсказанных (не-паддинг) токенов в пачке
+            token_count = mask.sum().item()
+            # накапливаем суммарный кросс-энтропийный лосс по токенам
+            total_loss += loss.item() * token_count  
+            total_tokens += token_count
+
             # Compute accuracy
             logits = outputs.logits
             predictions = torch.argmax(logits, dim=-1)
             # Shift predictions and labels for next token prediction
             predictions = predictions[:, :-1].contiguous()
             labels = input_ids[:, 1:].contiguous()
-            mask = attention_mask[:, 1:].contiguous()
+
             
-            # Count correct predictions
+
+            mask = attention_mask[:, 1:].contiguous()
             correct = (predictions == labels) * mask
             total_correct += correct.sum().item()
-            total_tokens += mask.sum().item()
-            
+
             # Print batch metrics
             batch_loss = loss.item()
             batch_accuracy = correct.sum().item() / mask.sum().item()
