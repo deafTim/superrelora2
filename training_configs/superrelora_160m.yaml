@@ -8,6 +8,9 @@ dataset_config: "wikitext-2-raw-v1"
 # Method: superrelora | relora | lora | full
 method: superrelora
 
+# On Zhores set via sbatch: SUPERRELORA_HF_HOME / HF_HOME
+# hf_home: /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
+
 # LoRA / ReLoRA / SuperReLoRa
 lora_r: 8
 lora_alpha: 16.0

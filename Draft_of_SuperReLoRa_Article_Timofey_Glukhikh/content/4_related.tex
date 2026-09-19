@@ -21,3 +21,4 @@ Random reinitialization encourages, but does not guarantee, that successive adap
 Prior PEFT methods either keep a fixed low-rank adapter~\cite{hu2021lora,zhang2023,liu2024dora,kopiczko2024vera,dettmers2023} or periodically merge adapters and hard-reset them to accumulate higher-rank updates~\cite{lialin2023stack}.
 SuperReLoRa follows the multi-cycle merge-and-reinit template of ReLoRA, but additionally enforces \emph{column-space orthogonality} of the new $W_A$ against an accumulated orthonormal basis of past adapters at each reinit.
 The goal is that successive LoRA cycles start in disjoint input subspaces, so that the summed update $\Delta W$ can increase in effective rank with the number of cycles.
+In experiments we compare LoRA, ReLoRA, and SuperReLoRa under a matched budget.

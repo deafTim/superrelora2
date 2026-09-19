@@ -64,16 +64,47 @@ def resolve_method(config, args) -> str:
     return config.get("method", "superrelora")
 
 
+def setup_hf_cache(config) -> str | None:
+    """Put HuggingFace hub/datasets cache on GPFS (or any path in config/env)."""
+    cache = (
+        config.get("hf_home")
+        or os.environ.get("SUPERRELORA_HF_HOME")
+        or os.environ.get("HF_HOME")
+    )
+    if not cache:
+        return None
+    cache = os.path.expanduser(cache)
+    os.makedirs(cache, exist_ok=True)
+    hub = os.path.join(cache, "hub")
+    datasets_cache = os.path.join(cache, "datasets")
+    transformers_cache = os.path.join(cache, "transformers")
+    os.makedirs(hub, exist_ok=True)
+    os.makedirs(datasets_cache, exist_ok=True)
+    os.makedirs(transformers_cache, exist_ok=True)
+    os.environ["HF_HOME"] = cache
+    os.environ["HUGGINGFACE_HUB_CACHE"] = hub
+    os.environ["TRANSFORMERS_CACHE"] = transformers_cache
+    os.environ["HF_DATASETS_CACHE"] = datasets_cache
+    print(f"HF cache (model + datasets): {cache}")
+    return cache
+
+
+def _hub_kwargs():
+    hub = os.environ.get("HUGGINGFACE_HUB_CACHE")
+    return {"cache_dir": hub} if hub else {}
+
+
 def prepare_model_and_tokenizer(config, method: str):
-    tokenizer = AutoTokenizer.from_pretrained(config["model_name"])
+    hub_kw = _hub_kwargs()
+    tokenizer = AutoTokenizer.from_pretrained(config["model_name"], **hub_kw)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
     if method == "full":
-        model = AutoModelForCausalLM.from_pretrained(config["model_name"])
+        model = AutoModelForCausalLM.from_pretrained(config["model_name"], **hub_kw)
         return model, tokenizer
 
-    base = AutoModelForCausalLM.from_pretrained(config["model_name"])
+    base = AutoModelForCausalLM.from_pretrained(config["model_name"], **hub_kw)
     orthogonal = method == "superrelora"
     # lora: wrap but never merge; relora/superrelora: merge
     model = SuperReLoRaModel(
@@ -88,8 +119,14 @@ def prepare_model_and_tokenizer(config, method: str):
 
 
 def prepare_dataset(config, tokenizer):
+    ds_kwargs = {}
+    if os.environ.get("HF_DATASETS_CACHE"):
+        ds_kwargs["cache_dir"] = os.environ["HF_DATASETS_CACHE"]
     dataset = load_dataset(
-        config["dataset_name"], config.get("dataset_config", None), split="train"
+        config["dataset_name"],
+        config.get("dataset_config", None),
+        split="train",
+        **ds_kwargs,
     )
     limit = config.get("limit_train_examples", None)
     if limit is not None and limit > 0:
@@ -309,6 +346,8 @@ def main():
     method = resolve_method(config, args)
     config["method"] = method
     os.makedirs(args.output_dir, exist_ok=True)
+
+    setup_hf_cache(config)
 
     model, tokenizer = prepare_model_and_tokenizer(config, method=method)
     dataset = prepare_dataset(config, tokenizer)

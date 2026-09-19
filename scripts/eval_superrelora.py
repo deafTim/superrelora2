@@ -125,11 +125,30 @@ def generate_text(model, tokenizer, prompt, max_length=100):
 def main():
     args = parse_args()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    # Prefer GPFS cache if sbatch exported HF_HOME / SUPERRELORA_HF_HOME
+    hf_home = os.environ.get("SUPERRELORA_HF_HOME") or os.environ.get("HF_HOME")
+    hub_kw = {}
+    ds_kw = {}
+    if hf_home:
+        hub = os.path.join(hf_home, "hub")
+        ds = os.path.join(hf_home, "datasets")
+        os.makedirs(hub, exist_ok=True)
+        os.makedirs(ds, exist_ok=True)
+        os.environ.setdefault("HUGGINGFACE_HUB_CACHE", hub)
+        os.environ.setdefault("HF_DATASETS_CACHE", ds)
+        hub_kw["cache_dir"] = hub
+        ds_kw["cache_dir"] = ds
+        print(f"HF cache: {hf_home}")
     
     # Load model and tokenizer
     print("Loading model and tokenizer...")
-    base_model = AutoModelForCausalLM.from_pretrained("nicholasKluge/TeenyTinyLlama-160m")
-    tokenizer = AutoTokenizer.from_pretrained("nicholasKluge/TeenyTinyLlama-160m")
+    base_model = AutoModelForCausalLM.from_pretrained(
+        "nicholasKluge/TeenyTinyLlama-160m", **hub_kw
+    )
+    tokenizer = AutoTokenizer.from_pretrained(
+        "nicholasKluge/TeenyTinyLlama-160m", **hub_kw
+    )
     
     # Load SuperReLoRA / ReLoRA model
     model = SuperReLoRaModel(
@@ -153,7 +172,9 @@ def main():
     
     # Load and prepare dataset
     print("Loading dataset...")
-    dataset = load_dataset(args.dataset_name, args.dataset_config, split='validation')
+    dataset = load_dataset(
+        args.dataset_name, args.dataset_config, split='validation', **ds_kw
+    )
     dataset = dataset.select(range(min(args.num_samples, len(dataset))))
     
     def tokenize_function(examples):

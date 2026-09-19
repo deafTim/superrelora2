@@ -5,13 +5,14 @@ model_name: "nicholasKluge/TeenyTinyLlama-160m"
 dataset_name: "wikitext"
 dataset_config: "wikitext-2-raw-v1"
 
-method: relora
+method: lora
 
+# Optional: override via env SUPERRELORA_HF_HOME / HF_HOME on cluster
 # hf_home: /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
 
 lora_r: 8
 lora_alpha: 16.0
-merge_every: 500
+merge_every: 0
 prune_ratio: 0.99
 jagged_warmup_steps: 50
 
