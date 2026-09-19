@@ -9,13 +9,20 @@ import argparse
 from src.superrelora_model import SuperReLoRaModel
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Evaluate SuperReLoRA model')
+    parser = argparse.ArgumentParser(description='Evaluate SuperReLoRA / ReLoRA model')
     parser.add_argument('--model_path', type=str, required=True, help='Path to model checkpoint')
     parser.add_argument('--dataset_name', type=str, default='wikitext', help='Dataset name')
     parser.add_argument('--dataset_config', type=str, default='wikitext-2-raw-v1', help='Dataset config')
     parser.add_argument('--batch_size', type=int, default=8, help='Batch size')
     parser.add_argument('--max_length', type=int, default=128, help='Max sequence length')
     parser.add_argument('--num_samples', type=int, default=1000, help='Number of samples to evaluate')
+    parser.add_argument(
+        '--method',
+        type=str,
+        default='superrelora',
+        choices=['superrelora', 'relora', 'lora'],
+        help='Must match training method (orthogonal_reinit on/off)',
+    )
     return parser.parse_args()
 
 def compute_perplexity(model, dataloader, device):
@@ -124,19 +131,24 @@ def main():
     base_model = AutoModelForCausalLM.from_pretrained("nicholasKluge/TeenyTinyLlama-160m")
     tokenizer = AutoTokenizer.from_pretrained("nicholasKluge/TeenyTinyLlama-160m")
     
-    # Load SuperReLoRA model
+    # Load SuperReLoRA / ReLoRA model
     model = SuperReLoRaModel(
         base_model=base_model,
         r=8,
         alpha=16,
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+        orthogonal_reinit=(args.method == "superrelora"),
     )
     
-    # Load checkpoint
+    # Load checkpoint (raw state_dict or wrapped dict)
     checkpoint = torch.load(args.model_path, map_location=device)
-    print("Checkpoint keys:", list(checkpoint.keys())[:10])
+    if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
+        state_dict = checkpoint["model_state_dict"]
+    else:
+        state_dict = checkpoint
+    print("Checkpoint keys:", list(state_dict.keys())[:10])
     print("Model state_dict keys:", list(model.state_dict().keys())[:10])
-    model.load_state_dict(checkpoint)
+    model.load_state_dict(state_dict, strict=False)
     model = model.to(device)
     
     # Load and prepare dataset

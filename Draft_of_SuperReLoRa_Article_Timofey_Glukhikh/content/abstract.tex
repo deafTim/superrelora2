@@ -1,4 +1,6 @@
 \begin{abstract}
-% We will present an algorithm of training high-rank networks using low-rank updates.
-Large language models are becoming increasingly larger, with the number of parameters in them growing correspondingly. Consequently, there is a need to develop methods to train these models while improving performance. We propose the SuperReLoRa method, which is based on the previously developed ReLoRA method. It utilizes low-rank updates to pre-trained models, allowing for a significant reduction in the resources required.
+Large language models are becoming increasingly larger, with the number of parameters growing correspondingly.
+Training or adapting them with full-rank updates is expensive, while a single low-rank adapter has limited expressive power.
+We propose SuperReLoRa, a multi-cycle extension of ReLoRA that periodically merges LoRA adapters into the base weights and reinitializes them.
+Unlike ReLoRA, which relies on random reinitialization, SuperReLoRa enforces column-space orthogonality of successive adapters at each reinit, so that new cycles start in input subspaces disjoint from previous ones and the accumulated update can increase in rank.
 \end{abstract}

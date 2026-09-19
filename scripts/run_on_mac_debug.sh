@@ -1,19 +1,18 @@
 #!/bin/bash
 
-# === Быстрый 1-минутный запуск SuperReLoRA на Mac ===
+# === Quick SuperReLoRA debug run ===
 
 export TOKENIZERS_PARALLELISM=false
+export PYTHONPATH=.
 
-# Создаём папку для результатов
 mkdir -p debug_results
 
-# Запуск с переопределёнными параметрами
 python scripts/train_superrelora.py \
   --config training_configs/superrelora_160m.yaml \
+  --method superrelora \
   --output_dir debug_results \
   --use_trainer \
   --merge_every 2 \
-  --merge_alpha 0.1 \
   --max_steps 5 \
   --batch_size 2 \
   --num_epochs 1 \

@@ -24,16 +24,18 @@ def count_superrelora_params(model: torch.nn.Module) -> Dict[str, int]:
     """Count the number of parameters in SuperReLoRA layers."""
     total_params = 0
     lora_params = 0
-    
+
     for module in model.modules():
-        if hasattr(module, 'lora_A') and hasattr(module, 'lora_B'):
-            total_params += module.weight.numel() + module.bias.numel()
-            lora_params += module.lora_A.numel() + module.lora_B.numel()
-    
+        if hasattr(module, "lora_A") and hasattr(module, "lora_B"):
+            total_params += module.weight.numel()
+            if module.bias is not None:
+                total_params += module.bias.numel()
+            lora_params += module.lora_A.weight.numel() + module.lora_B.weight.numel()
+
     return {
-        'total_params': total_params,
-        'lora_params': lora_params,
-        'base_params': total_params - lora_params
+        "total_params": total_params,
+        "lora_params": lora_params,
+        "base_params": total_params - lora_params,
     }
 
 def save_checkpoint(

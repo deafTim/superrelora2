@@ -1,69 +1,73 @@
-
-We will create an algorithm based on the ReLoRa algorithm. We will freeze pre-trained weights $W \in \mathbb{R}^{m \times n}$ and decompose the weight update $\delta W$ into a low-rank product $W_A W_B$ as shown in \eqref{eq:1}, where $s \in \mathbb{R}$  is a fixed scaling factor usually equal to $\frac{1}{r}$.
-
+We build on ReLoRA~\cite{lialin2023stack} and train with successive LoRA cycles.
+We freeze pretrained weights $W \in \mathbb{R}^{m \times n}$ and parameterize each cycle update as a low-rank product
 \begin{align}
 \begin{split}
-\delta W = s W_A W_B\\
-W_A \in \mathbb{R}^{in \times r}, W_B \in \mathbb{R}^{r \times out}
+\delta W &= s\, W_A W_B,\\
+W_A &\in \mathbb{R}^{in \times r},\qquad
+W_B \in \mathbb{R}^{r \times out},
 \end{split}
 \label{eq:1}
 \end{align}
+where $s \in \mathbb{R}$ is a fixed scaling factor (typically $\alpha_{\mathrm{LoRA}}/r$).
 
-Likewise in ReLoRA \cite{lialin2023stack} we will reset the values of $W_A$ and $W_B$ so we can increase the total rank of the update. Doing this multiple times brings the total neural network update to
+Every $q$ steps we merge the current adapter into the base weights and start a new LoRA cycle.
+After $N$ cycles the total update is
 \begin{align}
 \begin{split}
-\Delta W = \sum_{t=0}^{T_1} \delta W_t + \sum_{t=T_1}^{T_2} \delta W_t + \sum_{t=T_N - 1}^{T_N} \delta W_t = s W^1_A W^1_B + s W^2_A W^2_B + \cdots + s W^N_A W^N_B
+\Delta W
+&= \sum_{i=1}^{N} \delta W_i
+= \sum_{i=1}^{N} s\, W_A^{(i)} W_B^{(i)}.
 \end{split}
 \label{eq:2}
 \end{align}
-where the sums are independent enough, meaning that $\text{rank}(W^i_A W^i_B) + \text{rank}(W^j_A W^j_B) \geq r$
+If successive factors reuse the same input subspace, the sum in~\eqref{eq:2} need not increase rank.
+ReLoRA relies on random reinitialization and optimizer pruning to encourage new directions, but does not enforce independence of subspaces.
 
-% Unlike plain stochastic gradient descent, which solely relies on the value of the gradient at the current optimization time-step, Adam \cite{kingma2017adam} update is guided mainly by the first and second moments of the gradient accumulated over the previous steps. Let’s assume that at the re-initialization boundary $W^1_A$ and the corresponding gradient moments $m_A$ and $v_A$, are full-rank ($r$). Then, after the merge-and-reinit, continuing to use old gradient moments for $W^2_A$ will guide it in the same direction as $W^1_A$ and optimize the same subspace.
-% \newline
-Unlike plain stochastic gradient descent, which depends solely on the gradient's value at the current optimization step, the Adam update \cite{kingma2017adam} is primarily influenced by the first and second moments of the gradient, accumulated over previous steps. Suppose that at the re-initialization boundary, $W^1_A$ and its corresponding gradient moments, $m_A$ and $v_A$, are of full rank ($r$). In that case, after performing the merge-and-reinit process, continuing to utilize the previous gradient moments for $W^2_A$ will steer it along a similar trajectory as $W^1_A$, thereby optimizing within the same subspace.
+\paragraph{Column-space orthogonality at reinit.}
+Our modification is to force each new cycle to start in an input subspace orthogonal to previous ones.
+Let $U$ be an orthonormal basis of the column space spanned by all previously merged adapters $\{W_A^{(i)}\}_{i<k}$.
+At the beginning of cycle $k$ we reinitialize $W_A^{(k)}, W_B^{(k)}$ as in ReLoRA and then project
+\begin{equation}
+W_A^{(k)} \leftarrow \bigl(I - U U^\top\bigr) W_A^{(k)}.
+\label{eq:orth}
+\end{equation}
+Thus $W_A^{(k)\top} U = 0$ at cycle start: the new adapter uses input directions disjoint from past cycles.
+We update $U$ after each merge by appending an orthonormal basis of the just-merged $W_A$ (e.g., via QR).
+Orthogonality is enforced \emph{only at reinit}; during the cycle the factors may drift under gradient updates.
+This yields a multi-cycle LoRA scheme whose successive updates are initialized to be column-space orthogonal, aiming for
+$\mathrm{rank}(\Delta W)$ to grow with the number of cycles.
 
-To resolve this issue, ReLoRA performs a partial reset of the optimizer state during merge-and-reinit and sets the learning rate to 0 with a subsequent warmup. Specifically, we set 99\% of low-magnitude optimizer state values to zero and use a jagged-cosine learning rate schedule.
+As in ReLoRA, Adam moments~\cite{kingma2017adam} associated with the old subspace would otherwise pull the new factors back into previous directions.
+We therefore prune optimizer states at merge-and-reinit and restart the learning rate with a jagged warmup schedule.
+The full procedure is given in~\Algref{alg:superrelora}.
 
-% We, in turn, propose to gradually change the low-rank matrix $W^i_A \leftarrow (1 - \alpha)W^i_A$ to gradually change the moments as described in Algorithm 1.
-We take this approach a step further and propose gradually modifying the low-rank matrix according to $W^i_A \leftarrow (1 - \alpha)W^i_A$, and periodically merging it with the original parameters, as outlined in Algorithm 1.
-\begin{algorithm}
-\caption{Our algorithm. \( \theta \) is model parameters, \( \hat{\theta} \) is model parameters with linear layers replaced with Our algorithm, \( M \) and \( V \) are Adam optimizer states, \( \eta \) is learning rate scheduled according to a jagged scheduler, \( q \) is the reinit frequency, and finally, \( \alpha \) is the stepsize.}
+\begin{algorithm}[H]
+\caption{SuperReLoRa. \(\theta\) denotes model parameters; \(\hat{\theta}\) the model after replacing linear layers by LoRA adapters; \(M,V\) are Adam states; \(\eta\) follows a jagged schedule; \(q\) is the merge/reinit period; \(U\) stores an orthonormal basis of past adapter column spaces.}
+\label{alg:superrelora}
 \begin{algorithmic}[1]
-\Require \( \theta \), \( M \), \( V \), \( \eta \), \( q \), \( \alpha \)
-\For{\( t \) in warm start steps}
-    \State Update \( \theta \), \( M \), \( V \), \( \eta \) \{Regular training for warm start\}
+\Require \(\theta\), \(M\), \(V\), \(\eta\), \(q\)
+\State \(U \leftarrow [\,]\) \{empty basis\}
+\For{\(t\) in warm-start steps}
+    \State Update \(\theta\), \(M\), \(V\), \(\eta\) \{standard training\}
 \EndFor
 \For{layer in model layers}
     \If{layer is linear}
-        \State layer \( \leftarrow \) Our algorithm(\( W^i \), \( W^i_A \), \( W_B^i \))
-        \State Freeze \( W^i\)
+        \State Replace layer by LoRA\((W, W_A, W_B)\); freeze \(W\)
     \EndIf
 \EndFor
-\For{\( t \) in training steps}
-    \State Update \( \hat{\theta} \), \( M \), \( V \) \{Training step with Our algorithm\}
-    \If{MOD(\( t \), \( q \)) = 0}
-        \For{\( l \) in model layers}
-            \If{\( l \) is linear}
-                % \State \( W_i \) \( \leftarrow \) \( W_i + sW^i_AW^i_B \)
-                \State \( W_i \) \( \leftarrow \) \( W_i + \alpha W^i_AW^i_B \)
-                % \State \( W^i_A \) \( \leftarrow \) kaiming\_init(\( W^i_A \)); \( W^i_B \) \( \leftarrow \) 0
-                \State $W^i_A \leftarrow \sqrt{(1 - \alpha)}W^i_A$; $W^i_B \leftarrow \sqrt{(1 - \alpha)}W^i_B$
-                \State \( M_{W^i_A} \) \( \leftarrow \) prune(\( M_{W^i_A} \)); \( V_{W^i_A} \) \( \leftarrow \) prune(\( V_{W^i_A} \))
-            \EndIf
+\For{\(t\) in training steps}
+    \State Update \(\hat{\theta}\), \(M\), \(V\) \{LoRA training step\}
+    \If{\(\mathrm{MOD}(t,q)=0\)}
+        \For{\(l\) in linear layers}
+            \State \(W \leftarrow W + s\, W_A W_B\) \{full merge\}
+            \State Append orthonormal basis of \(\mathrm{col}(W_A)\) to \(U\); re-orthonormalize \(U\)
+            \State \(W_A \leftarrow \mathrm{kaiming\_init}(W_A)\); \(W_B \leftarrow 0\) \{reinit\}
+            \State \(W_A \leftarrow (I - U U^\top) W_A\) \{column-space orthogonalization\}
+            \State \(M_{W_A},V_{W_A},M_{W_B},V_{W_B} \leftarrow \mathrm{prune}(\cdot)\)
         \EndFor
-        \State Start \( \eta \) warmup
+        \State Restart \(\eta\) warmup
     \EndIf
 \EndFor
-\State \textbf{return} \( \theta \)
+\State \textbf{return} \(\theta\)
 \end{algorithmic}
 \end{algorithm}
-
-% \[
-% \text{rank}(A + B) \leq \text{rank}(A) + \text{rank}(B)
-% \]
-
-
-% \textbf{Jagged Learning Rate Schedule:}
-
-% This schedule involves periodically resetting the learning rate to zero and then quickly warming it up back to the scheduled rate.
-% The purpose is to balance exploration and exploitation during training, allowing the model to escape local minima and explore new areas of the parameter space.

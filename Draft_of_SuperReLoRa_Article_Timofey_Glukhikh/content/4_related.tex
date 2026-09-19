@@ -1,9 +1,23 @@
-The notion of parameter-efficient fine-tuning appeared in a series of pioneering works \cite{rebuffi2017, rebuffi2018, rosenfeld2020} that address the problem of transfer learning in the computer vision domain. These authors developed the idea of an adapter, a small learnable auxiliary module, specifically as a small convolution layer plugged in parallel to the original convolution layer.
+\paragraph{Parameter-efficient fine-tuning.}
+Parameter-efficient fine-tuning (PEFT) reduces the cost of adapting large pretrained models by updating only a small subset of parameters.
+Early adapter methods introduced compact trainable modules for transfer learning in vision~\cite{rebuffi2017,rebuffi2018} and NLP~\cite{houlsby2019,pfeiffer2021}.
+Alternative PEFT families include bias-only tuning~\cite{benzaken2022}, prompt- and prefix-tuning~\cite{lester2021,li2021}, and other lightweight reparameterizations~\cite{he2022}.
+Our work follows the low-rank adapter line rather than sequential modules or prompt-based approaches.
 
+\paragraph{Low-rank adapters.}
+LoRA~\cite{hu2021lora} freezes pretrained weights $W$ and learns a low-rank update $\delta W = s W_A W_B$.
+Subsequent variants improve allocation or efficiency of this factorization: AdaLoRA~\cite{zhang2023} adapts rank via SVD-based parameterization, DoRA~\cite{liu2024dora} decomposes updates into magnitude and direction, VeRA~\cite{kopiczko2024vera} shares frozen random projections across layers, and QLoRA~\cite{dettmers2023} combines LoRA with quantized base weights.
+Practical implementations further reduce memory and compute~\cite{cherniuk2023,dettmers2023}.
+These methods typically train a \emph{single} low-rank adapter of fixed rank $r$, and therefore do not explicitly accumulate a higher-rank total update over the course of training.
 
+\paragraph{High-rank training through low-rank updates.}
+ReLoRA~\cite{lialin2023stack} observes that repeated merge-and-reinitialize of LoRA adapters can approximate a higher-rank update
+$\Delta W = \sum_{i} s W_A^{i} W_B^{i}$
+while keeping the optimizer state small.
+After each merge into $W$, ReLoRA hard-resets the adapter matrices and partially resets Adam moments~\cite{kingma2017adam}, because retained moments otherwise continue to optimize the previous subspace; it also uses a jagged learning-rate schedule with warm restarts.
+Random reinitialization encourages, but does not guarantee, that successive adapters explore new directions: nothing prevents a new cycle from recovering the same column space as an earlier one.
 
-The adapter concept was extended to the natural language processing (NLP) domain by \cite{houlsby2019} and has since been studied in various works \cite{dettmers2023, he2022, hu2021, pfeiffer2021, ruckle2021, zhang2023}. In \cite{houlsby2019}, an adapter, represented as a bottleneck residual block, is appended at the end of each Transformer sub-block. The adapter’s residual block consists of two fully connected layers with intermediate feature dimensions $m < d$.
-
-Several studies \cite{dettmers2023, hu2021, lialin2023, zhang2023} have focused on low-rank adapters. \cite{hu2021} pioneered this area with LoRA, a simple adapter structure plugged in parallel, which consists of the multiplication of two matrices of incomplete rank. \cite{zhang2023} proposed an adaptive variant of LoRA, called AdaLoRA, which uses Singular Value Decomposition (SVD) for adapter representation and rank truncation. Practical aspects of a low-rank adapter-based approach are studied in \cite{cherniuk2023, dettmers2023}. \cite{cherniuk2023} presented a scheme for training a low-rank adapter with original model weights in quantized arithmetics, while \cite{dettmers2023} observed that a careful choice of matrix multiplication order in low-rank adapters significantly reduces computational and memory usage.
-
-Alternative research directions to adapters have also been explored \cite{benzaken2022, guo2021, lester2021, li2021, liu2022}. \cite{benzaken2022} reported that even a small number of parameters in bias vectors are sufficient to achieve competitive performance. DiffPruning, introduced by \cite{guo2021}, imposes an $L_0$-regularization constraint with differential relaxation on a vector of auxiliary parameters $\delta \tau$ to reparametrize original parameters. \cite{liu2022} proposed scaling intermediate activations in attention and linear layers. The connection between prompt fine-tuning methods \cite{lester2021, li2021, liu2023} and adapter methods is revealed in \cite{he2022}.
+\paragraph{Our positioning.}
+Prior PEFT methods either keep a fixed low-rank adapter~\cite{hu2021lora,zhang2023,liu2024dora,kopiczko2024vera,dettmers2023} or periodically merge adapters and hard-reset them to accumulate higher-rank updates~\cite{lialin2023stack}.
+SuperReLoRa follows the multi-cycle merge-and-reinit template of ReLoRA, but additionally enforces \emph{column-space orthogonality} of the new $W_A$ against an accumulated orthonormal basis of past adapters at each reinit.
+The goal is that successive LoRA cycles start in disjoint input subspaces, so that the summed update $\Delta W$ can increase in effective rank with the number of cycles.

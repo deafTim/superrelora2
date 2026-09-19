@@ -5,17 +5,14 @@ model_name: "nicholasKluge/TeenyTinyLlama-160m"
 dataset_name: "wikitext"
 dataset_config: "wikitext-2-raw-v1"
 
-# Method: superrelora | relora | lora | full
-method: superrelora
+method: relora
 
-# LoRA / ReLoRA / SuperReLoRa
 lora_r: 8
 lora_alpha: 16.0
 merge_every: 500
 prune_ratio: 0.99
 jagged_warmup_steps: 50
 
-# Training
 num_epochs: 3
 batch_size: 8
 max_length: 512
@@ -23,29 +20,24 @@ learning_rate: 2e-4
 weight_decay: 0.01
 gradient_accumulation_steps: 4
 
-# Optimizer
 optimizer:
   type: "adamw"
   beta1: 0.9
   beta2: 0.999
   eps: 1e-8
 
-# Scheduler
 scheduler:
   type: "cosine"
   warmup_steps: 100
   total_steps: 1000
 
-# Precision
 fp16: true
 bf16: false
 
-# Logging
 logging_steps: 100
 save_steps: 1000
 eval_steps: 1000
 
-# LoRA targets
 target_modules:
   - "q_proj"
   - "k_proj"
