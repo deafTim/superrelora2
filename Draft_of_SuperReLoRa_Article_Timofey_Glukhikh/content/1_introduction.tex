@@ -1,0 +1,7 @@
+Large networks with hundreds of billions of parameters are extremely difficult to retrain. But we may need to fine-tune the model for a different task.
+
+\cite{aghajanyan2020intrinsic} shows that the pre-trained language models have a low “intrinsic dimension”. Also, The Lottery Ticket Hypothesis  \cite{frankle2019lottery} suggests that overparametrization could be minimized.
+
+Previously, low-rank approximation of large matrices and tensors had wide usage, (see, e.g. \citet{lubich2013projectorsplitting}, \citet{sulz2023numerical}). 
+
+Inspired by this, authors in \cite{hu2021lora} hypothesized that the updates to the weights also have a low “intrinsic rank” during adaptation. They created an algorithm named LoRa. Later, an algorithm ReLoRa was built based on the LoRa algorithm \citet{lialin2023stack}.
