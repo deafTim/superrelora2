@@ -96,7 +96,13 @@ def _hub_kwargs():
 
 def prepare_model_and_tokenizer(config, method: str):
     hub_kw = _hub_kwargs()
-    tokenizer = AutoTokenizer.from_pretrained(config["model_name"], **hub_kw)
+    # Prefer fp16 on Turing GPUs (e.g. RTX 2080 Ti); bf16 often breaks / is slow.
+    use_bf16 = bool(config.get("bf16", False))
+    use_fp16 = bool(config.get("fp16", True)) and not use_bf16
+    torch_dtype = torch.bfloat16 if use_bf16 else (torch.float16 if use_fp16 else torch.float32)
+    hub_kw = {**hub_kw, "torch_dtype": torch_dtype}
+
+    tokenizer = AutoTokenizer.from_pretrained(config["model_name"], **{k: v for k, v in hub_kw.items() if k != "torch_dtype"})
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
@@ -199,6 +205,8 @@ def train_with_trainer(model, tokenizer, dataset, config, output_dir, method: st
         save_strategy="epoch",
         remove_unused_columns=False,
         report_to=[],
+        fp16=bool(config.get("fp16", True)) and not bool(config.get("bf16", False)),
+        bf16=bool(config.get("bf16", False)),
     )
 
     callbacks = []
