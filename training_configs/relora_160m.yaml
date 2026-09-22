@@ -2,7 +2,7 @@
 model_name: "nicholasKluge/TeenyTinyLlama-160m"
 
 # Dataset
-dataset_name: "wikitext"
+dataset_name: "Salesforce/wikitext"
 dataset_config: "wikitext-2-raw-v1"
 
 method: relora

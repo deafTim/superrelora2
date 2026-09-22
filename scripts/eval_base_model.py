@@ -8,7 +8,7 @@ import argparse
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Evaluate base model')
-    parser.add_argument('--dataset_name', type=str, default='wikitext', help='Dataset name')
+    parser.add_argument('--dataset_name', type=str, default='Salesforce/wikitext', help='Dataset name')
     parser.add_argument('--dataset_config', type=str, default='wikitext-2-raw-v1', help='Dataset config')
     parser.add_argument('--batch_size', type=int, default=16, help='Batch size')
     parser.add_argument('--max_length', type=int, default=64, help='Max sequence length')
@@ -117,7 +117,7 @@ def main():
     
     # Load and prepare dataset
     print("\nLoading dataset...")
-    dataset = load_dataset('wikitext', 'wikitext-2-raw-v1', split='validation')
+    dataset = load_dataset('Salesforce/wikitext', 'wikitext-2-raw-v1', split='validation')
     dataset = dataset.select(range(min(args.num_samples, len(dataset))))
     print(f"Dataset loaded with {len(dataset)} examples")
     

@@ -11,7 +11,7 @@ from src.superrelora_model import SuperReLoRaModel
 def parse_args():
     parser = argparse.ArgumentParser(description='Evaluate SuperReLoRA / ReLoRA model')
     parser.add_argument('--model_path', type=str, required=True, help='Path to model checkpoint')
-    parser.add_argument('--dataset_name', type=str, default='wikitext', help='Dataset name')
+    parser.add_argument('--dataset_name', type=str, default='Salesforce/wikitext', help='Dataset name')
     parser.add_argument('--dataset_config', type=str, default='wikitext-2-raw-v1', help='Dataset config')
     parser.add_argument('--batch_size', type=int, default=8, help='Batch size')
     parser.add_argument('--max_length', type=int, default=128, help='Max sequence length')
