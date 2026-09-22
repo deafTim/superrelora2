@@ -96,21 +96,32 @@ def _hub_kwargs():
 
 def prepare_model_and_tokenizer(config, method: str):
     hub_kw = _hub_kwargs()
-    # Prefer fp16 on Turing GPUs (e.g. RTX 2080 Ti); bf16 often breaks / is slow.
-    use_bf16 = bool(config.get("bf16", False))
-    use_fp16 = bool(config.get("fp16", True)) and not use_bf16
-    torch_dtype = torch.bfloat16 if use_bf16 else (torch.float16 if use_fp16 else torch.float32)
-    hub_kw = {**hub_kw, "torch_dtype": torch_dtype}
-
-    tokenizer = AutoTokenizer.from_pretrained(config["model_name"], **{k: v for k, v in hub_kw.items() if k != "torch_dtype"})
+    # Keep master weights in float32; mixed precision is handled by Trainer (fp16/bf16 amp).
+    # Loading weights as fp16 + GradScaler causes: "Attempting to unscale FP16 gradients."
+    tokenizer_kw = {k: v for k, v in hub_kw.items()}
+    tokenizer = AutoTokenizer.from_pretrained(config["model_name"], **tokenizer_kw)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
+    # Prefer `dtype` (transformers 5.x); fall back handled by from_pretrained kwargs.
+    load_kw = {**hub_kw, "dtype": torch.float32}
+
     if method == "full":
-        model = AutoModelForCausalLM.from_pretrained(config["model_name"], **hub_kw)
+        try:
+            model = AutoModelForCausalLM.from_pretrained(config["model_name"], **load_kw)
+        except TypeError:
+            load_kw.pop("dtype", None)
+            load_kw["torch_dtype"] = torch.float32
+            model = AutoModelForCausalLM.from_pretrained(config["model_name"], **load_kw)
         return model, tokenizer
 
-    base = AutoModelForCausalLM.from_pretrained(config["model_name"], **hub_kw)
+    try:
+        base = AutoModelForCausalLM.from_pretrained(config["model_name"], **load_kw)
+    except TypeError:
+        load_kw.pop("dtype", None)
+        load_kw["torch_dtype"] = torch.float32
+        base = AutoModelForCausalLM.from_pretrained(config["model_name"], **load_kw)
+
     orthogonal = method == "superrelora"
     # lora: wrap but never merge; relora/superrelora: merge
     model = SuperReLoRaModel(
