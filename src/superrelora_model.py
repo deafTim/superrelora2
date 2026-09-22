@@ -59,11 +59,19 @@ class SuperReLoRaModel(nn.Module):
                 dropout=0.0,
                 bias=old_linear.bias is not None,
             )
+            # Match base Linear dtype/device (critical for fp16/bf16 amp).
+            new_linear = new_linear.to(
+                device=old_linear.weight.device,
+                dtype=old_linear.weight.dtype,
+            )
             new_linear.weight.data.copy_(old_linear.weight.data)
             new_linear.weight.requires_grad_(False)
             if old_linear.bias is not None:
                 new_linear.bias.data.copy_(old_linear.bias.data)
                 new_linear.bias.requires_grad_(False)
+            # U buffer stays float32 for QR numerics
+            if new_linear.U is not None:
+                new_linear.U = new_linear.U.float()
 
             setattr(parent, child_name, new_linear)
             self.replaced_modules.append(name)

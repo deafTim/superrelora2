@@ -61,18 +61,24 @@ class SuperReLoRALinear(nn.Module):
         self.register_buffer("U", torch.zeros(in_f, 0), persistent=True)
 
     def forward(self, x: torch.Tensor):
-        return (
-            F.linear(x, self.weight, self.bias)
-            + self.lora_B(self.lora_A(self.dropout(x))) * self.scale
-        )
+        # Keep compute dtype in sync with activations (fp16/bf16 amp).
+        weight = self.weight.to(dtype=x.dtype)
+        bias = None if self.bias is None else self.bias.to(dtype=x.dtype)
+        lora_x = self.dropout(x)
+        # LoRA mats may be fp32; cast inside Linear via input dtype after projecting A/B
+        a_w = self.lora_A.weight.to(dtype=x.dtype)
+        b_w = self.lora_B.weight.to(dtype=x.dtype)
+        lora_out = F.linear(F.linear(lora_x, a_w), b_w)
+        return F.linear(x, weight, bias) + lora_out * self.scale
 
     @torch.no_grad()
     def _append_basis_from_A(self) -> None:
         """Accumulate column-space of current A into U.
 
         lora_A.weight is (r, in_f); paper W_A is (in_f, r), so columns are A.T.
+        QR is done in float32 for stability.
         """
-        A_cols = self.lora_A.weight.data.T.contiguous()  # (in_f, r)
+        A_cols = self.lora_A.weight.data.detach().float().T.contiguous()  # (in_f, r)
         # Drop near-zero columns for numerical stability
         col_norms = A_cols.norm(dim=0)
         keep = col_norms > 1e-8
@@ -83,7 +89,7 @@ class SuperReLoRALinear(nn.Module):
         if self.U.numel() == 0:
             self.U = Q
         else:
-            stacked = torch.cat([self.U, Q], dim=1)
+            stacked = torch.cat([self.U.float(), Q], dim=1)
             self.U = torch.linalg.qr(stacked, mode="reduced").Q
 
     @torch.no_grad()
@@ -91,10 +97,10 @@ class SuperReLoRALinear(nn.Module):
         """Project A onto the orthogonal complement of span(U): A <- A (I - UU^T)."""
         if self.U.numel() == 0:
             return
-        # (r, in) - ((r, in) @ (in, k)) @ (k, in)
-        self.lora_A.weight.data.sub_(
-            (self.lora_A.weight.data @ self.U) @ self.U.T
-        )
+        A = self.lora_A.weight.data
+        A_f = A.float()
+        U = self.U.float()
+        A.copy_((A_f - (A_f @ U) @ U.T).to(dtype=A.dtype))
 
     @torch.no_grad()
     def merge_and_reinit(
@@ -104,14 +110,18 @@ class SuperReLoRALinear(nn.Module):
         prune_ratio: float = 0.99,
     ) -> float:
         """Full merge, optional column-space orthogonal reinit, Adam prune."""
-        delta = (self.lora_B.weight @ self.lora_A.weight) * self.scale
+        dtype = self.weight.dtype
+        delta = (self.lora_B.weight.float() @ self.lora_A.weight.float()) * self.scale
         delta_norm = delta.norm().item()
-        self.weight.data.add_(delta)
+        self.weight.data.add_(delta.to(dtype=dtype))
 
         self._append_basis_from_A()
 
         nn.init.kaiming_uniform_(self.lora_A.weight, a=math.sqrt(5))
         nn.init.zeros_(self.lora_B.weight)
+        # Preserve compute dtype after reinit
+        self.lora_A.weight.data = self.lora_A.weight.data.to(dtype=dtype)
+        self.lora_B.weight.data = self.lora_B.weight.data.to(dtype=dtype)
 
         if orthogonal:
             self._orthogonalize_A()
