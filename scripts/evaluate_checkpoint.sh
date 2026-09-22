@@ -7,7 +7,7 @@ export TOKENIZERS_PARALLELISM=false
 # Run evaluation
 python scripts/eval_superrelora.py \
     --model_path results/final_model/pytorch_model.bin \
-    --dataset_name wikitext \
+    --dataset_name Salesforce/wikitext \
     --dataset_config wikitext-2-raw-v1 \
     --batch_size 8 \
     --max_length 128 \
