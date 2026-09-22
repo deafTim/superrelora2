@@ -70,7 +70,9 @@ python scripts/train_superrelora.py \
   --batch_size 8 \
   --num_epochs 3 \
   --logging_steps 100 \
-  --eval_steps 1000
+  --eval_steps 1000 \
+  --save_steps 1000 \
+  --resume_from_checkpoint auto
 
 touch "${OUT_DIR}/DONE"
 echo "Finished ${METHOD}"

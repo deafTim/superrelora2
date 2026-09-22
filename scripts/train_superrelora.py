@@ -40,6 +40,13 @@ def parse_args():
     parser.add_argument("--max_steps", type=int, help="Maximum number of training steps")
     parser.add_argument("--logging_steps", type=int, help="Logging steps")
     parser.add_argument("--eval_steps", type=int, help="Evaluation steps")
+    parser.add_argument("--save_steps", type=int, help="Checkpoint every N steps")
+    parser.add_argument(
+        "--resume_from_checkpoint",
+        type=str,
+        default=None,
+        help="Checkpoint dir, or 'auto' to resume latest under output_dir",
+    )
     parser.add_argument("--batch_size", type=int, help="Batch size")
     parser.add_argument("--num_epochs", type=int, help="Number of epochs")
     parser.add_argument("--limit_train_examples", type=int, help="Limit train examples (debug)")
@@ -49,6 +56,29 @@ def parse_args():
         help="Deprecated alias for --method full",
     )
     return parser.parse_args()
+
+
+def find_latest_checkpoint(output_dir: str) -> str | None:
+    """Return path to the newest checkpoint-* under output_dir, if any."""
+    if not os.path.isdir(output_dir):
+        return None
+    ckpts = []
+    for name in os.listdir(output_dir):
+        if not name.startswith("checkpoint-"):
+            continue
+        path = os.path.join(output_dir, name)
+        if not os.path.isdir(path):
+            continue
+        suffix = name.split("checkpoint-", 1)[-1]
+        if not suffix.isdigit():
+            continue
+        # Prefer complete checkpoints (trainer_state present).
+        if not os.path.isfile(os.path.join(path, "trainer_state.json")):
+            continue
+        ckpts.append((int(suffix), path))
+    if not ckpts:
+        return None
+    return max(ckpts, key=lambda x: x[0])[1]
 
 
 def load_config(config_path):
@@ -196,7 +226,15 @@ class MergeReinitCallback(TrainerCallback):
             self._warmup_left -= 1
 
 
-def train_with_trainer(model, tokenizer, dataset, config, output_dir, method: str):
+def train_with_trainer(
+    model,
+    tokenizer,
+    dataset,
+    config,
+    output_dir,
+    method: str,
+    resume_from_checkpoint=None,
+):
     config["learning_rate"] = float(config["learning_rate"])
     config["weight_decay"] = float(config["weight_decay"])
     config["batch_size"] = int(config["batch_size"])
@@ -205,6 +243,7 @@ def train_with_trainer(model, tokenizer, dataset, config, output_dir, method: st
     if method == "lora":
         merge_every = 0
 
+    save_steps = int(config.get("save_steps", 1000) or 1000)
     training_args = TrainingArguments(
         output_dir=output_dir,
         num_train_epochs=config["num_epochs"],
@@ -213,7 +252,9 @@ def train_with_trainer(model, tokenizer, dataset, config, output_dir, method: st
         learning_rate=config["learning_rate"],
         weight_decay=config["weight_decay"],
         logging_steps=int(config.get("logging_steps", 100)),
-        save_strategy="epoch",
+        save_strategy="steps",
+        save_steps=save_steps,
+        save_total_limit=int(config.get("save_total_limit", 3)),
         remove_unused_columns=False,
         report_to=[],
         fp16=bool(config.get("fp16", True)) and not bool(config.get("bf16", False)),
@@ -237,7 +278,15 @@ def train_with_trainer(model, tokenizer, dataset, config, output_dir, method: st
         data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False),
         callbacks=callbacks,
     )
-    trainer.train()
+
+    resume = resume_from_checkpoint
+    if resume == "auto":
+        resume = find_latest_checkpoint(output_dir)
+    elif resume in (None, "", "false", "False", "none", "None"):
+        resume = None
+    if resume:
+        print(f"Resuming from checkpoint: {resume}")
+    trainer.train(resume_from_checkpoint=resume)
     trainer.save_model(os.path.join(output_dir, "final_model"))
 
 
@@ -354,6 +403,8 @@ def main():
         config["logging_steps"] = args.logging_steps
     if args.eval_steps is not None:
         config["eval_steps"] = args.eval_steps
+    if args.save_steps is not None:
+        config["save_steps"] = args.save_steps
     if args.batch_size is not None:
         config["batch_size"] = args.batch_size
     if args.num_epochs is not None:
@@ -379,7 +430,15 @@ def main():
     print("dtype:", next(model.parameters()).dtype)
 
     if args.use_trainer:
-        train_with_trainer(model, tokenizer, dataset, config, args.output_dir, method)
+        train_with_trainer(
+            model,
+            tokenizer,
+            dataset,
+            config,
+            args.output_dir,
+            method,
+            resume_from_checkpoint=args.resume_from_checkpoint,
+        )
     else:
         train_manual(model, tokenizer, dataset, config, args.output_dir, method)
 

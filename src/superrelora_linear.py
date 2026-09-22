@@ -85,12 +85,13 @@ class SuperReLoRALinear(nn.Module):
         if not keep.any():
             return
         A_cols = A_cols[:, keep]
-        Q = torch.linalg.qr(A_cols, mode="reduced").Q
+        # QR .Q can be non-contiguous; safetensors requires contiguous buffers.
+        Q = torch.linalg.qr(A_cols, mode="reduced").Q.contiguous()
         if self.U.numel() == 0:
             self.U = Q
         else:
             stacked = torch.cat([self.U.float(), Q], dim=1)
-            self.U = torch.linalg.qr(stacked, mode="reduced").Q
+            self.U = torch.linalg.qr(stacked, mode="reduced").Q.contiguous()
 
     @torch.no_grad()
     def _orthogonalize_A(self) -> None:
