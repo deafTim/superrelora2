@@ -1,0 +1,34 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/111 [00:00<?, ?it/s]Loading weights:  70%|███████   | 78/111 [00:00<00:00, 729.82it/s]Loading weights: 100%|██████████| 111/111 [00:00<00:00, 655.28it/s]
+Traceback (most recent call last):
+  File "/beegfs/home/timofey.glukhikh/superrelora2/scripts/train_superrelora.py", line 370, in <module>
+    main()
+  File "/beegfs/home/timofey.glukhikh/superrelora2/scripts/train_superrelora.py", line 353, in main
+    dataset = prepare_dataset(config, tokenizer)
+  File "/beegfs/home/timofey.glukhikh/superrelora2/scripts/train_superrelora.py", line 125, in prepare_dataset
+    dataset = load_dataset(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/datasets/load.py", line 2606, in load_dataset
+    builder_instance = load_dataset_builder(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/datasets/load.py", line 2277, in load_dataset_builder
+    dataset_module = dataset_module_factory(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/datasets/load.py", line 1923, in dataset_module_factory
+    raise e1 from None
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/datasets/load.py", line 1905, in dataset_module_factory
+    ).get_module()
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/datasets/load.py", line 1221, in get_module
+    dataset_readme_path = cached_path(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/datasets/utils/file_utils.py", line 211, in cached_path
+    output_path = get_from_cache(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/datasets/utils/file_utils.py", line 583, in get_from_cache
+    response = fsspec_head(url, storage_options=storage_options)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/datasets/utils/file_utils.py", line 361, in fsspec_head
+    return fs.info(path)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/huggingface_hub/hf_file_system.py", line 903, in info
+    resolved_path = self.resolve_path(path, revision=revision)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/huggingface_hub/hf_file_system.py", line 305, in resolve_path
+    parsed = parse_hf_uri(f"{constants.HF_PROTOCOL}{path}")
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/huggingface_hub/utils/_hf_uris.py", line 319, in parse_hf_uri
+    return _parse_repo_body(location, type_, raw=raw)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/huggingface_hub/utils/_hf_uris.py", line 617, in _parse_repo_body
+    raise HfUriError(uri=raw, msg=f"Repository id must be 'namespace/name', got '{repo_id}'.")
+huggingface_hub.errors.HfUriError: Invalid HF URI 'hf://datasets/wikitext@b08601e04326c79dfdd32d625aee71d232d685c3/README.md'. Repository id must be 'namespace/name', got 'wikitext'.
