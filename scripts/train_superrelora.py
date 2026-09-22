@@ -195,7 +195,6 @@ def train_with_trainer(model, tokenizer, dataset, config, output_dir, method: st
         per_device_train_batch_size=config["batch_size"],
         learning_rate=config["learning_rate"],
         weight_decay=config["weight_decay"],
-        logging_dir=os.path.join(output_dir, "logs"),
         logging_steps=int(config.get("logging_steps", 100)),
         save_strategy="epoch",
         remove_unused_columns=False,
