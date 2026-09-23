@@ -8,4 +8,5 @@ Inspired by this, \cite{hu2021lora} hypothesized that weight updates during adap
 ReLoRA~\cite{lialin2023stack} extends LoRA by periodically merging low-rank adapters into the base weights and reinitializing them, so that the total update can become higher-rank over many cycles.
 However, ReLoRA does not explicitly prevent successive adapters from occupying overlapping subspaces.
 We propose SuperReLoRa, which keeps the multi-cycle merge-and-reinit structure but enforces column-space orthogonality of new LoRA factors at each reinitialization.
+To mitigate suboptimal hard resets when a cycle has not yet converged, we soften the merge with transition momentum that partially retains the previous adapters.
 Empirically, we compare LoRA, ReLoRA, and SuperReLoRa under identical hyperparameters and compute.

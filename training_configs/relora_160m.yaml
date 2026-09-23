@@ -13,6 +13,7 @@ lora_r: 8
 lora_alpha: 16.0
 merge_every: 500
 prune_ratio: 0.99
+reinit_momentum: 0.2
 jagged_warmup_steps: 50
 
 num_epochs: 3

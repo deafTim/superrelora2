@@ -1,21 +1,22 @@
 \paragraph{Goal.}
-We evaluate whether enforcing column-space orthogonality at merge-and-reinit improves over standard LoRA and over ReLoRA when the training budget is matched.
-The only algorithmic difference between ReLoRA and SuperReLoRa is the orthogonal projection of $W_A$ at reinitialization~\eqref{eq:orth}; LoRA uses the same adapter parameterization but never merges.
+We evaluate whether enforcing column-space orthogonality at merge-and-reinit, together with transition momentum that softens unfinished cycles, improves over standard LoRA and over ReLoRA when the training budget is matched.
+Relative to ReLoRA, SuperReLoRa adds the orthogonal projection of $W_A$ at reinitialization~\eqref{eq:orth}; both multi-cycle methods use the same partial-merge momentum~\eqref{eq:partial_merge}--\eqref{eq:reinit_momentum}.
+LoRA uses the same adapter parameterization but never merges.
 
 \paragraph{Setup.}
 All methods fine-tune \texttt{nicholasKluge/TeenyTinyLlama-160m} on WikiText-2~\cite{merity2016pointer} (train split for training, validation for evaluation).
-Unless stated otherwise we use rank $r{=}8$, LoRA scaling $\alpha_{\mathrm{LoRA}}{=}16$, learning rate $2{\times}10^{-4}$, batch size $8$, sequence length $512$, and three epochs.
+Unless stated otherwise we use rank $r{=}8$, LoRA scaling $\alpha_{\mathrm{LoRA}}{=}16$, learning rate $2{\times}10^{-4}$, batch size $8$, sequence length $512$, and a budget of $8000$ optimizer steps (about $1.7$ epochs under our tokenization).
 Adapters are attached to attention and MLP projections
 (\texttt{q/k/v/o\_proj}, \texttt{gate/up/down\_proj}).
-For ReLoRA and SuperReLoRa we merge every $q{=}500$ steps, prune $99\%$ of low-magnitude Adam moments, and apply a short jagged learning-rate warmup after each merge.
-LoRA uses the same optimizer and schedule without merge-and-reinit.
+For ReLoRA and SuperReLoRa we merge every $q{=}500$ steps (16 merges in total), use transition momentum $\mu{=}0.2$, prune $99\%$ of low-magnitude Adam moments (then scale remaining moments by $\mu$), and apply a short jagged learning-rate warmup after each merge.
+LoRA uses the same optimizer and schedule without merge-and-reinit ($\mu$ unused).
 Experiments run on the Zhores HPC cluster (SLURM partition \texttt{gpu\_devel}, single GPU).
 
 \paragraph{Methods.}
 \begin{itemize}
     \item \textbf{LoRA:} frozen base weights, single low-rank adapter, no merge.
-    \item \textbf{ReLoRA:} periodic full merge into $W$, random reinit of $W_A,W_B$, Adam prune, jagged LR warmup.
-    \item \textbf{SuperReLoRa:} same as ReLoRA, plus column-space orthogonalization of $W_A$ against the accumulated basis $U$ at each reinit.
+    \item \textbf{ReLoRA:} periodic partial merge into $W$, random reinit of $W_A,W_B$ blended with momentum $\mu$, Adam prune+decay, jagged LR warmup.
+    \item \textbf{SuperReLoRa:} same as ReLoRA, plus column-space orthogonalization of the fresh $W_A$ against the accumulated basis $U$ before the momentum blend.
 \end{itemize}
 
 \paragraph{Metrics.}
@@ -23,13 +24,13 @@ We report training loss, validation perplexity, and token-level next-token accur
 To probe the intended mechanism we also track (i)~the residual overlap $\|W_A^\top U\|_F$ immediately after reinit and (ii)~the dimension of the accumulated basis $U$ (or an effective-rank estimate of the summed update $\Delta W$) as a function of the number of cycles.
 
 \paragraph{Results.}
-% Fill after runs on Zhores.
+% Refill after re-training with reinit_momentum=0.2.
 Table~\ref{tab:main} summarizes the main comparison.
 \begin{table}[t]
 \centering
-\caption{Matched-budget comparison on WikiText-2 (TeenyTinyLlama-160M).
+\caption{Matched-budget comparison on WikiText-2 (TeenyTinyLlama-160M), $8000$ steps.
 Lower perplexity is better.
-Numbers to be filled after training.}
+Numbers to be filled after training with transition momentum $\mu{=}0.2$.}
 \label{tab:main}
 \begin{tabular}{lccc}
 \toprule
@@ -42,4 +43,4 @@ SuperReLoRa & -- & -- & -- \\
 \end{tabular}
 \end{table}
 
-We expect SuperReLoRa to match or improve upon ReLoRA on validation perplexity while exhibiting lower post-reinit subspace overlap and a faster growth of effective rank across cycles; LoRA provides a fixed-rank reference without multi-cycle accumulation.
+We expect SuperReLoRa with transition momentum to reduce merge-induced disruption relative to a hard orthogonal reset, while still encouraging new input subspaces across cycles; LoRA provides a fixed-rank reference without multi-cycle accumulation.

@@ -37,15 +37,34 @@ Orthogonality is enforced \emph{only at reinit}; during the cycle the factors ma
 This yields a multi-cycle LoRA scheme whose successive updates are initialized to be column-space orthogonal, aiming for
 $\mathrm{rank}(\Delta W)$ to grow with the number of cycles.
 
-As in ReLoRA, Adam moments~\cite{kingma2017adam} associated with the old subspace would otherwise pull the new factors back into previous directions.
-We therefore prune optimizer states at merge-and-reinit and restart the learning rate with a jagged warmup schedule.
+\paragraph{Transition momentum.}
+A hard full merge assumes that the current cycle has already absorbed a useful rank-$r$ update into $W$.
+In practice merges are frequent, so $W_A,W_B$ may be far from converged: discarding them and forcing a purely orthogonal $W_A$ can throw away unfinished work and induce a suboptimal transition into the next cycle.
+We therefore introduce a momentum coefficient $\mu \in [0,1]$ that softens the merge-and-reinit step.
+Writing $W_A^{\mathrm{old}},W_B^{\mathrm{old}}$ for the adapters just before the merge and $\delta W = s\, W_A^{\mathrm{old}} W_B^{\mathrm{old}}$, we perform a \emph{partial} merge
+\begin{equation}
+W \leftarrow W + (1-\mu)\, \delta W,
+\label{eq:partial_merge}
+\end{equation}
+reinitialize fresh factors $W_A^{\mathrm{new}},W_B^{\mathrm{new}}$ (with~\eqref{eq:orth} when using SuperReLoRa), and blend
+\begin{align}
+\begin{split}
+W_A &\leftarrow (1-\mu)\, W_A^{\mathrm{new}} + \mu\, W_A^{\mathrm{old}},\\
+W_B &\leftarrow (1-\mu)\, W_B^{\mathrm{new}} + \mu\, W_B^{\mathrm{old}}.
+\end{split}
+\label{eq:reinit_momentum}
+\end{align}
+Thus $\mu{=}0$ recovers the classical hard reset, while $\mu{>}0$ keeps a fraction of the previous cycle in both the base weights (via the residual adapter) and the new factors.
+Adam moments are pruned as in ReLoRA and then scaled by $\mu$ so that optimizer momentum is carried across the boundary rather than fully discarded.
+As in ReLoRA, we also restart the learning rate with a jagged warmup schedule after each merge.
 The full procedure is given in~\Algref{alg:superrelora}.
 
 \begin{algorithm}[H]
-\caption{SuperReLoRa. \(\theta\) denotes model parameters; \(\hat{\theta}\) the model after replacing linear layers by LoRA adapters; \(M,V\) are Adam states; \(\eta\) follows a jagged schedule; \(q\) is the merge/reinit period; \(U\) stores an orthonormal basis of past adapter column spaces.}
+\caption{SuperReLoRa with transition momentum.
+\(\theta\) denotes model parameters; \(\hat{\theta}\) the model after replacing linear layers by LoRA adapters; \(M,V\) are Adam states; \(\eta\) follows a jagged schedule; \(q\) is the merge/reinit period; \(\mu\) is the transition momentum; \(U\) stores an orthonormal basis of past adapter column spaces.}
 \label{alg:superrelora}
 \begin{algorithmic}[1]
-\Require \(\theta\), \(M\), \(V\), \(\eta\), \(q\)
+\Require \(\theta\), \(M\), \(V\), \(\eta\), \(q\), \(\mu\)
 \State \(U \leftarrow [\,]\) \{empty basis\}
 \For{\(t\) in warm-start steps}
     \State Update \(\theta\), \(M\), \(V\), \(\eta\) \{standard training\}
@@ -59,11 +78,15 @@ The full procedure is given in~\Algref{alg:superrelora}.
     \State Update \(\hat{\theta}\), \(M\), \(V\) \{LoRA training step\}
     \If{\(\mathrm{MOD}(t,q)=0\)}
         \For{\(l\) in linear layers}
-            \State \(W \leftarrow W + s\, W_A W_B\) \{full merge\}
+            \State \(\delta W \leftarrow s\, W_A W_B\)
+            \State \(W \leftarrow W + (1-\mu)\, \delta W\) \{partial merge\}
             \State Append orthonormal basis of \(\mathrm{col}(W_A)\) to \(U\); re-orthonormalize \(U\)
-            \State \(W_A \leftarrow \mathrm{kaiming\_init}(W_A)\); \(W_B \leftarrow 0\) \{reinit\}
+            \State \(W_A^{\mathrm{old}} \leftarrow W_A\); \(W_B^{\mathrm{old}} \leftarrow W_B\)
+            \State \(W_A \leftarrow \mathrm{kaiming\_init}(W_A)\); \(W_B \leftarrow 0\) \{fresh reinit\}
             \State \(W_A \leftarrow (I - U U^\top) W_A\) \{column-space orthogonalization\}
-            \State \(M_{W_A},V_{W_A},M_{W_B},V_{W_B} \leftarrow \mathrm{prune}(\cdot)\)
+            \State \(W_A \leftarrow (1-\mu)\, W_A + \mu\, W_A^{\mathrm{old}}\) \{momentum blend\}
+            \State \(W_B \leftarrow (1-\mu)\, W_B + \mu\, W_B^{\mathrm{old}}\)
+            \State \(M_{W_A},V_{W_A},M_{W_B},V_{W_B} \leftarrow \mathrm{prune}(\cdot)\); then scale by \(\mu\)
         \EndFor
         \State Restart \(\eta\) warmup
     \EndIf

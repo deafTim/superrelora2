@@ -1,4 +1,4 @@
-We presented SuperReLoRa, a multi-cycle LoRA method that combines ReLoRA-style merge-and-reinit with enforced column-space orthogonality of successive adapters at reinitialization.
+We presented SuperReLoRa, a multi-cycle LoRA method that combines ReLoRA-style merge-and-reinit with enforced column-space orthogonality of successive adapters at reinitialization, plus transition momentum that partially merges and blends old and new adapters so unfinished cycles are not discarded abruptly.
 Under a matched training budget we compare LoRA, ReLoRA, and SuperReLoRa on language-model adaptation.
-The orthogonal reinit aims to start each cycle in an input subspace disjoint from previous ones, so that the accumulated update $\Delta W$ can increase in effective rank.
-Future work includes stronger orthogonality constraints during the cycle, scaling to larger models, and broader downstream evaluations.
+The orthogonal reinit aims to start each cycle in an input subspace disjoint from previous ones, so that the accumulated update $\Delta W$ can increase in effective rank, while momentum stabilizes the boundary between cycles.
+Future work includes ablating $\mu$, stronger orthogonality constraints during the cycle, scaling to larger models, and broader downstream evaluations.

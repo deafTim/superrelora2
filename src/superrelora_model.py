@@ -13,6 +13,7 @@ class SuperReLoRaModel(nn.Module):
 
     orthogonal_reinit=True  -> SuperReLoRa (column-space orthogonalize at reinit)
     orthogonal_reinit=False -> ReLoRA baseline (merge + random reinit only)
+    reinit_momentum μ       -> partial merge + blend old/new A,B (smooth cycle transition)
     """
 
     def __init__(
@@ -24,6 +25,7 @@ class SuperReLoRaModel(nn.Module):
         target_modules: Optional[List[str]] = None,
         orthogonal_reinit: bool = True,
         prune_ratio: float = 0.99,
+        reinit_momentum: float = 0.0,
     ):
         super().__init__()
         self.model = base_model
@@ -32,6 +34,7 @@ class SuperReLoRaModel(nn.Module):
         self.target_modules = target_modules or []
         self.orthogonal_reinit = orthogonal_reinit
         self.prune_ratio = prune_ratio
+        self.reinit_momentum = float(reinit_momentum)
 
         self._patch_linear_layers()
 
@@ -118,6 +121,7 @@ class SuperReLoRaModel(nn.Module):
                 optimizer_state=opt_state,
                 orthogonal=self.orthogonal_reinit,
                 prune_ratio=self.prune_ratio,
+                reinit_momentum=self.reinit_momentum,
             )
         return total_norm
 

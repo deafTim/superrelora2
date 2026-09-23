@@ -161,6 +161,7 @@ def prepare_model_and_tokenizer(config, method: str):
         target_modules=config.get("target_modules", []),
         orthogonal_reinit=orthogonal,
         prune_ratio=float(config.get("prune_ratio", 0.99)),
+        reinit_momentum=float(config.get("reinit_momentum", 0.0)),
     )
     return model, tokenizer
 
@@ -216,7 +217,10 @@ class MergeReinitCallback(TrainerCallback):
             self._warmup_left = self.warmup_steps
             for group in optimizer.param_groups:
                 group["lr"] = 0.0
-            print(f"[merge] step={step} delta_norm={norm:.4f} (orthogonal={model.orthogonal_reinit})")
+            print(
+                f"[merge] step={step} delta_norm={norm:.4f} "
+                f"(orthogonal={model.orthogonal_reinit}, momentum={model.reinit_momentum})"
+            )
 
         if self._warmup_left > 0 and optimizer is not None:
             done = self.warmup_steps - self._warmup_left + 1
@@ -359,7 +363,7 @@ def train_manual(model, tokenizer, dataset, config, output_dir, method: str):
                         group["lr"] = 0.0
                     print(
                         f"[merge] step={global_step} delta_norm={merged:.4f} "
-                        f"(orthogonal={model.orthogonal_reinit})"
+                        f"(orthogonal={model.orthogonal_reinit}, momentum={model.reinit_momentum})"
                     )
 
             if warmup_left > 0:
@@ -424,6 +428,7 @@ def main():
     print("method:", method)
     if isinstance(model, SuperReLoRaModel):
         print("orthogonal_reinit:", model.orthogonal_reinit)
+        print("reinit_momentum:", model.reinit_momentum)
         print("replaced modules:", len(model.replaced_modules))
     print("CUDA available:", torch.cuda.is_available())
     print("device:", next(model.parameters()).device)

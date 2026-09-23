@@ -27,17 +27,32 @@ def prune_adam_state(state: dict, prune_ratio: float = 0.99) -> None:
         tensor.mul_(tensor.abs() >= threshold)
 
 
+def decay_adam_state(state: dict, keep: float) -> None:
+    """Scale Adam moments by `keep` to carry optimizer momentum across reinit."""
+    if keep <= 0:
+        for key in ("exp_avg", "exp_avg_sq"):
+            if key in state and state[key] is not None:
+                state[key].zero_()
+        return
+    if keep >= 1:
+        return
+    for key in ("exp_avg", "exp_avg_sq"):
+        if key in state and state[key] is not None:
+            state[key].mul_(keep)
+
+
 class SuperReLoRALinear(nn.Module):
     """
     Frozen base weight + LoRA:
         y = x W^T + scale * B(A(x))
 
-    merge_and_reinit:
-        W <- W + scale * (B @ A)
-        update orthonormal basis U of past A column-spaces (input directions)
-        reinit A, B
-        if orthogonal: A <- A (I - U U^T)
-        prune Adam moments for A, B
+    merge_and_reinit (reinit_momentum μ ∈ [0, 1]):
+        W <- W + (1-μ) * scale * (B @ A)     # partial merge
+        update orthonormal basis U from current A
+        reinit A, B; if orthogonal: A <- A (I - U U^T)
+        A <- (1-μ) A_new + μ A_old           # smooth unfinished cycle
+        B <- (1-μ) B_new + μ B_old
+        prune / decay Adam moments for A, B
     """
 
     def __init__(self, in_f, out_f, r=64, alpha=32, dropout=0.0, bias=True):
@@ -65,7 +80,6 @@ class SuperReLoRALinear(nn.Module):
         weight = self.weight.to(dtype=x.dtype)
         bias = None if self.bias is None else self.bias.to(dtype=x.dtype)
         lora_x = self.dropout(x)
-        # LoRA mats may be fp32; cast inside Linear via input dtype after projecting A/B
         a_w = self.lora_A.weight.to(dtype=x.dtype)
         b_w = self.lora_B.weight.to(dtype=x.dtype)
         lora_out = F.linear(F.linear(lora_x, a_w), b_w)
@@ -79,7 +93,6 @@ class SuperReLoRALinear(nn.Module):
         QR is done in float32 for stability.
         """
         A_cols = self.lora_A.weight.data.detach().float().T.contiguous()  # (in_f, r)
-        # Drop near-zero columns for numerical stability
         col_norms = A_cols.norm(dim=0)
         keep = col_norms > 1e-8
         if not keep.any():
@@ -109,28 +122,49 @@ class SuperReLoRALinear(nn.Module):
         optimizer_state: Optional[dict] = None,
         orthogonal: bool = True,
         prune_ratio: float = 0.99,
+        reinit_momentum: float = 0.0,
     ) -> float:
-        """Full merge, optional column-space orthogonal reinit, Adam prune."""
+        """Partial merge + reinit with optional orthogonalization and transition momentum.
+
+        reinit_momentum μ ∈ [0, 1]:
+          - μ = 0: full merge into W, hard A/B reset (classic ReLoRA / SuperReLoRa).
+          - μ > 0: merge only (1-μ) of BA into W; blend new A/B with old adapters so an
+            unfinished cycle is not discarded; Adam moments are scaled by μ after prune.
+        """
+        mu = float(reinit_momentum)
+        mu = 0.0 if mu < 0 else (1.0 if mu > 1 else mu)
+
         dtype = self.weight.dtype
-        delta = (self.lora_B.weight.float() @ self.lora_A.weight.float()) * self.scale
+        A_old = self.lora_A.weight.data.clone()
+        B_old = self.lora_B.weight.data.clone()
+
+        delta = (B_old.float() @ A_old.float()) * self.scale
         delta_norm = delta.norm().item()
-        self.weight.data.add_(delta.to(dtype=dtype))
+        # Absorb only (1-μ); residual stays in the blended adapters below.
+        self.weight.data.add_(((1.0 - mu) * delta).to(dtype=dtype))
 
         self._append_basis_from_A()
 
         nn.init.kaiming_uniform_(self.lora_A.weight, a=math.sqrt(5))
         nn.init.zeros_(self.lora_B.weight)
-        # Preserve compute dtype after reinit
         self.lora_A.weight.data = self.lora_A.weight.data.to(dtype=dtype)
         self.lora_B.weight.data = self.lora_B.weight.data.to(dtype=dtype)
 
         if orthogonal:
             self._orthogonalize_A()
 
+        if mu > 0:
+            # Soft transition: keep a fraction of the previous (possibly unfinished) cycle.
+            self.lora_A.weight.data.mul_(1.0 - mu).add_(A_old.to(dtype=dtype), alpha=mu)
+            self.lora_B.weight.data.mul_(1.0 - mu).add_(B_old.to(dtype=dtype), alpha=mu)
+
         if optimizer_state is not None:
             for p in (self.lora_A.weight, self.lora_B.weight):
                 state = optimizer_state.get(p, None)
-                if state is not None:
-                    prune_adam_state(state, prune_ratio=prune_ratio)
+                if state is None:
+                    continue
+                prune_adam_state(state, prune_ratio=prune_ratio)
+                if mu > 0:
+                    decay_adam_state(state, keep=mu)
 
         return delta_norm

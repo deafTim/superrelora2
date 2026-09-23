@@ -16,6 +16,8 @@ lora_r: 8
 lora_alpha: 16.0
 merge_every: 500
 prune_ratio: 0.99
+# Soften hard reinit: partial merge + blend old/new A,B (0 = classic hard reset)
+reinit_momentum: 0.2
 jagged_warmup_steps: 50
 
 # Training
