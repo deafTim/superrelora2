@@ -43,8 +43,9 @@ RUN_DIR="${PROJECT_ROOT}/runs/${METHOD}"
 FINAL_DIR="${RUN_DIR}/final_model"
 METRICS_OUT="${RUN_DIR}/metrics.json"
 
-if [[ -f "${METRICS_OUT}" ]]; then
-  echo "Skip ${METHOD}: ${METRICS_OUT} exists"
+# Idempotent only if FORCE is unset; delete metrics.json to re-eval after fixes.
+if [[ -z "${FORCE:-}" ]] && [[ -f "${METRICS_OUT}" ]]; then
+  echo "Skip ${METHOD}: ${METRICS_OUT} exists (FORCE=1 to overwrite)"
   exit 0
 fi
 
