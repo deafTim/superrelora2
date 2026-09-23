@@ -205,6 +205,12 @@ def main():
     
     # Load checkpoint (dir with safetensors/bin, or raw .pt/.bin)
     state_dict = load_state_dict(args.model_path, map_location="cpu")
+    # U grows across merges (in_f, n*r); fresh model has (in_f, 0).
+    # Forward does not use U — drop it so load_state_dict does not size-mismatch.
+    dropped_u = [k for k in state_dict if k.endswith(".U")]
+    if dropped_u:
+        state_dict = {k: v for k, v in state_dict.items() if not k.endswith(".U")}
+        print(f"Skipping {len(dropped_u)} orthonormal basis buffers (.U) for eval load")
     print("Checkpoint keys:", list(state_dict.keys())[:10])
     print("Model state_dict keys:", list(model.state_dict().keys())[:10])
     missing, unexpected = model.load_state_dict(state_dict, strict=False)
