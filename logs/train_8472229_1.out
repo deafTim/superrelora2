@@ -1,0 +1,32 @@
+method=relora
+REPO_ROOT=/beegfs/home/timofey.glukhikh/superrelora2
+HF_HOME=/gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
+OUT_DIR=/gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/runs/relora
+CUDA_VISIBLE_DEVICES=0
+Tue Sep 22 21:27:21 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.15              Driver Version: 550.54.15      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 2080 Ti     Off |   00000000:02:00.0 Off |                  N/A |
+| 27%   30C    P8             40W /  260W |       0MiB /  11264MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+HF cache (model + datasets): /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
+method: relora
+orthogonal_reinit: False
+replaced modules: 84
+CUDA available: True
+device: cpu
+dtype: torch.bfloat16

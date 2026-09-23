@@ -1,0 +1,2 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+slurmstepd: error: *** JOB 8472230 ON vt12 CANCELLED AT 2026-09-22T21:34:53 ***

@@ -1,0 +1,66 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/111 [00:00<?, ?it/s]Loading weights:   1%|          | 1/111 [00:00<00:21,  5.10it/s]Loading weights:   2%|▏         | 2/111 [00:00<00:25,  4.34it/s]Loading weights:  36%|███▌      | 40/111 [00:00<00:00, 89.52it/s]Loading weights:  52%|█████▏    | 58/111 [00:00<00:00, 97.89it/s]Loading weights:  63%|██████▎   | 70/111 [00:00<00:00, 98.77it/s]Loading weights:  77%|███████▋  | 85/111 [00:01<00:00, 101.20it/s]Loading weights:  86%|████████▋ | 96/111 [00:01<00:00, 84.10it/s] Loading weights: 100%|██████████| 111/111 [00:01<00:00, 88.65it/s]
+[RANK 0] Detected kernel version 5.4.278, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+  0%|          | 0/8000 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/beegfs/home/timofey.glukhikh/superrelora2/scripts/train_superrelora.py", line 369, in <module>
+    main()
+  File "/beegfs/home/timofey.glukhikh/superrelora2/scripts/train_superrelora.py", line 363, in main
+    train_with_trainer(model, tokenizer, dataset, config, args.output_dir, method)
+  File "/beegfs/home/timofey.glukhikh/superrelora2/scripts/train_superrelora.py", line 221, in train_with_trainer
+    trainer.train()
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/trainer.py", line 1449, in train
+    return inner_training_loop(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/trainer.py", line 1531, in _inner_training_loop
+    self._run_epoch(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/trainer.py", line 1759, in _run_epoch
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/trainer.py", line 1931, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/trainer.py", line 2005, in compute_loss
+    outputs = model(**inputs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/beegfs/home/timofey.glukhikh/superrelora2/src/superrelora_model.py", line 79, in forward
+    return self.model(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/utils/generic.py", line 939, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 467, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/utils/generic.py", line 1068, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/utils/output_capturing.py", line 262, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 403, in forward
+    hidden_states = decoder_layer(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/modeling_layers.py", line 114, in __call__
+    return super().__call__(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 308, in forward
+    hidden_states, _ = self.self_attn(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 254, in forward
+    query_states = self.q_proj(hidden_states).view(hidden_shape).transpose(1, 2)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/beegfs/home/timofey.glukhikh/superrelora2/src/superrelora_linear.py", line 65, in forward
+    F.linear(x, self.weight, self.bias)
+RuntimeError: expected mat1 and mat2 to have the same dtype, but got: c10::BFloat16 != float
+  0%|          | 0/8000 [00:00<?, ?it/s]

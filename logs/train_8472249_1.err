@@ -1,0 +1,29 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/111 [00:00<?, ?it/s]Loading weights:   1%|          | 1/111 [00:00<00:13,  8.19it/s]Loading weights:  57%|█████▋    | 63/111 [00:00<00:00, 326.01it/s]Loading weights:  88%|████████▊ | 98/111 [00:00<00:00, 275.36it/s]Loading weights: 100%|██████████| 111/111 [00:00<00:00, 277.50it/s]
+[RANK 0] Detected kernel version 5.4.278, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+  0%|          | 0/8000 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/beegfs/home/timofey.glukhikh/superrelora2/scripts/train_superrelora.py", line 377, in <module>
+    main()
+  File "/beegfs/home/timofey.glukhikh/superrelora2/scripts/train_superrelora.py", line 371, in main
+    train_with_trainer(model, tokenizer, dataset, config, args.output_dir, method)
+  File "/beegfs/home/timofey.glukhikh/superrelora2/scripts/train_superrelora.py", line 229, in train_with_trainer
+    trainer.train()
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/trainer.py", line 1449, in train
+    return inner_training_loop(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/trainer.py", line 1531, in _inner_training_loop
+    self._run_epoch(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/trainer.py", line 1781, in _run_epoch
+    grad_norm = self._clip_grad_norm(model)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/transformers/trainer.py", line 2539, in _clip_grad_norm
+    return self.accelerator.clip_grad_norm_(model.parameters(), self.args.max_grad_norm)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/accelerate/accelerator.py", line 3047, in clip_grad_norm_
+    self.unscale_gradients()
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/accelerate/accelerator.py", line 2955, in unscale_gradients
+    self.scaler.unscale_(opt)
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/amp/grad_scaler.py", line 338, in unscale_
+    optimizer_state["found_inf_per_device"] = self._unscale_grads_(
+  File "/home/timofey.glukhikh/.conda/science_phan/lib/python3.10/site-packages/torch/amp/grad_scaler.py", line 260, in _unscale_grads_
+    raise ValueError("Attempting to unscale FP16 gradients.")
+ValueError: Attempting to unscale FP16 gradients.
+  0%|          | 0/8000 [00:02<?, ?it/s]

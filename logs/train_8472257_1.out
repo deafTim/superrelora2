@@ -1,0 +1,86 @@
+method=relora
+REPO_ROOT=/beegfs/home/timofey.glukhikh/superrelora2
+HF_HOME=/gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
+OUT_DIR=/gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/runs/relora
+CUDA_VISIBLE_DEVICES=0
+Tue Sep 22 21:54:53 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.163.01             Driver Version: 550.163.01     CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce GTX 1080 Ti     Off |   00000000:02:00.0 Off |                  N/A |
+| 21%   25C    P8             10W /  250W |       0MiB /  11264MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+HF cache (model + datasets): /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
+method: relora
+orthogonal_reinit: False
+replaced modules: 84
+CUDA available: True
+device: cpu
+dtype: torch.float32
+{'loss': '3.743', 'grad_norm': '1.033', 'learning_rate': '0.0001975', 'epoch': '0.02179'}
+{'loss': '3.597', 'grad_norm': '1.083', 'learning_rate': '0.000195', 'epoch': '0.04357'}
+{'loss': '3.466', 'grad_norm': '0.7321', 'learning_rate': '0.0001925', 'epoch': '0.06536'}
+{'loss': '3.466', 'grad_norm': '0.8044', 'learning_rate': '0.00019', 'epoch': '0.08715'}
+[merge] step=500 delta_norm=131.0724 (orthogonal=False)
+{'loss': '3.432', 'grad_norm': '2.549', 'learning_rate': '0.0001875', 'epoch': '0.1089'}
+{'loss': '3.418', 'grad_norm': '0.7153', 'learning_rate': '0.000185', 'epoch': '0.1307'}
+{'loss': '3.376', 'grad_norm': '0.637', 'learning_rate': '0.0001825', 'epoch': '0.1525'}
+{'loss': '3.345', 'grad_norm': '1.391', 'learning_rate': '0.00018', 'epoch': '0.1743'}
+{'loss': '3.324', 'grad_norm': '0.609', 'learning_rate': '0.0001775', 'epoch': '0.1961'}
+[merge] step=1000 delta_norm=112.8374 (orthogonal=False)
+{'loss': '3.305', 'grad_norm': '0.7821', 'learning_rate': '0.000175', 'epoch': '0.2179'}
+{'loss': '3.314', 'grad_norm': '0.7567', 'learning_rate': '0.0001726', 'epoch': '0.2397'}
+{'loss': '3.283', 'grad_norm': '0.7594', 'learning_rate': '0.00017', 'epoch': '0.2614'}
+{'loss': '3.319', 'grad_norm': '0.8683', 'learning_rate': '0.0001676', 'epoch': '0.2832'}
+{'loss': '3.262', 'grad_norm': '0.6491', 'learning_rate': '0.0001651', 'epoch': '0.305'}
+[merge] step=1500 delta_norm=116.9797 (orthogonal=False)
+{'loss': '3.248', 'grad_norm': '0.8292', 'learning_rate': '0.0001625', 'epoch': '0.3268'}
+{'loss': '3.268', 'grad_norm': '0.7121', 'learning_rate': '0.0001601', 'epoch': '0.3486'}
+{'loss': '3.25', 'grad_norm': '0.8991', 'learning_rate': '0.0001576', 'epoch': '0.3704'}
+{'loss': '3.269', 'grad_norm': '0.6387', 'learning_rate': '0.0001551', 'epoch': '0.3922'}
+{'loss': '3.245', 'grad_norm': '0.8933', 'learning_rate': '0.0001526', 'epoch': '0.4139'}
+[merge] step=2000 delta_norm=112.8914 (orthogonal=False)
+{'loss': '3.254', 'grad_norm': '0.8931', 'learning_rate': '0.0001501', 'epoch': '0.4357'}
+{'loss': '3.244', 'grad_norm': '0.7822', 'learning_rate': '0.0001476', 'epoch': '0.4575'}
+{'loss': '3.213', 'grad_norm': '4.76', 'learning_rate': '0.0001451', 'epoch': '0.4793'}
+{'loss': '3.267', 'grad_norm': '0.6631', 'learning_rate': '0.0001425', 'epoch': '0.5011'}
+{'loss': '3.188', 'grad_norm': '1.364', 'learning_rate': '0.0001401', 'epoch': '0.5229'}
+[merge] step=2500 delta_norm=104.8698 (orthogonal=False)
+{'loss': '3.209', 'grad_norm': '0.6699', 'learning_rate': '0.0001376', 'epoch': '0.5447'}
+{'loss': '3.165', 'grad_norm': '0.9489', 'learning_rate': '0.0001351', 'epoch': '0.5664'}
+{'loss': '3.187', 'grad_norm': '0.5292', 'learning_rate': '0.0001325', 'epoch': '0.5882'}
+{'loss': '3.176', 'grad_norm': '0.6378', 'learning_rate': '0.0001301', 'epoch': '0.61'}
+{'loss': '3.206', 'grad_norm': '0.9384', 'learning_rate': '0.0001276', 'epoch': '0.6318'}
+[merge] step=3000 delta_norm=97.9176 (orthogonal=False)
+{'loss': '3.145', 'grad_norm': '0.6407', 'learning_rate': '0.0001251', 'epoch': '0.6536'}
+{'loss': '3.208', 'grad_norm': '0.7078', 'learning_rate': '0.0001225', 'epoch': '0.6754'}
+{'loss': '3.211', 'grad_norm': '0.7279', 'learning_rate': '0.00012', 'epoch': '0.6972'}
+{'loss': '3.177', 'grad_norm': '0.5982', 'learning_rate': '0.0001176', 'epoch': '0.719'}
+{'loss': '3.164', 'grad_norm': '0.6792', 'learning_rate': '0.0001151', 'epoch': '0.7407'}
+[merge] step=3500 delta_norm=89.9685 (orthogonal=False)
+{'loss': '3.16', 'grad_norm': '1.413', 'learning_rate': '0.0001125', 'epoch': '0.7625'}
+{'loss': '3.12', 'grad_norm': '0.5706', 'learning_rate': '0.0001101', 'epoch': '0.7843'}
+{'loss': '3.184', 'grad_norm': '0.8512', 'learning_rate': '0.0001076', 'epoch': '0.8061'}
+{'loss': '3.096', 'grad_norm': '0.5758', 'learning_rate': '0.0001051', 'epoch': '0.8279'}
+{'loss': '3.145', 'grad_norm': '0.5306', 'learning_rate': '0.0001026', 'epoch': '0.8497'}
+[merge] step=4000 delta_norm=84.3383 (orthogonal=False)
+{'loss': '3.126', 'grad_norm': '0.493', 'learning_rate': '0.0001001', 'epoch': '0.8715'}
+{'loss': '3.174', 'grad_norm': '0.7081', 'learning_rate': '9.758e-05', 'epoch': '0.8932'}
+{'loss': '3.118', 'grad_norm': '1.227', 'learning_rate': '9.508e-05', 'epoch': '0.915'}
+{'loss': '3.183', 'grad_norm': '1.12', 'learning_rate': '9.258e-05', 'epoch': '0.9368'}
+{'loss': '3.077', 'grad_norm': '0.7175', 'learning_rate': '9.008e-05', 'epoch': '0.9586'}
+[merge] step=4500 delta_norm=70.7943 (orthogonal=False)
+{'loss': '3.128', 'grad_norm': '0.8938', 'learning_rate': '8.758e-05', 'epoch': '0.9804'}

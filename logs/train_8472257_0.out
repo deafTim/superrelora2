@@ -1,0 +1,114 @@
+method=lora
+REPO_ROOT=/beegfs/home/timofey.glukhikh/superrelora2
+HF_HOME=/gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
+OUT_DIR=/gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/runs/lora
+CUDA_VISIBLE_DEVICES=0
+Tue Sep 22 21:54:53 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.15              Driver Version: 550.54.15      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 2080 Ti     Off |   00000000:02:00.0 Off |                  N/A |
+| 27%   31C    P8             40W /  260W |       0MiB /  11264MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+HF cache (model + datasets): /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
+method: lora
+orthogonal_reinit: False
+replaced modules: 84
+CUDA available: True
+device: cpu
+dtype: torch.float32
+{'loss': '3.743', 'grad_norm': '1.032', 'learning_rate': '0.0001975', 'epoch': '0.02179'}
+{'loss': '3.597', 'grad_norm': '1.08', 'learning_rate': '0.000195', 'epoch': '0.04357'}
+{'loss': '3.465', 'grad_norm': '0.7323', 'learning_rate': '0.0001925', 'epoch': '0.06536'}
+{'loss': '3.466', 'grad_norm': '0.8035', 'learning_rate': '0.00019', 'epoch': '0.08715'}
+{'loss': '3.432', 'grad_norm': '2.534', 'learning_rate': '0.0001875', 'epoch': '0.1089'}
+{'loss': '3.416', 'grad_norm': '0.8505', 'learning_rate': '0.000185', 'epoch': '0.1307'}
+{'loss': '3.371', 'grad_norm': '0.7565', 'learning_rate': '0.0001825', 'epoch': '0.1525'}
+{'loss': '3.341', 'grad_norm': '1.661', 'learning_rate': '0.00018', 'epoch': '0.1743'}
+{'loss': '3.32', 'grad_norm': '0.736', 'learning_rate': '0.0001775', 'epoch': '0.1961'}
+{'loss': '3.302', 'grad_norm': '0.9016', 'learning_rate': '0.000175', 'epoch': '0.2179'}
+{'loss': '3.31', 'grad_norm': '0.8831', 'learning_rate': '0.0001726', 'epoch': '0.2397'}
+{'loss': '3.277', 'grad_norm': '0.8986', 'learning_rate': '0.00017', 'epoch': '0.2614'}
+{'loss': '3.311', 'grad_norm': '1.02', 'learning_rate': '0.0001676', 'epoch': '0.2832'}
+{'loss': '3.255', 'grad_norm': '0.7777', 'learning_rate': '0.0001651', 'epoch': '0.305'}
+{'loss': '3.243', 'grad_norm': '1.006', 'learning_rate': '0.0001625', 'epoch': '0.3268'}
+{'loss': '3.258', 'grad_norm': '0.8511', 'learning_rate': '0.0001601', 'epoch': '0.3486'}
+{'loss': '3.24', 'grad_norm': '1.052', 'learning_rate': '0.0001576', 'epoch': '0.3704'}
+{'loss': '3.259', 'grad_norm': '0.7681', 'learning_rate': '0.0001551', 'epoch': '0.3922'}
+{'loss': '3.236', 'grad_norm': '1.051', 'learning_rate': '0.0001526', 'epoch': '0.4139'}
+{'loss': '3.243', 'grad_norm': '1.041', 'learning_rate': '0.0001501', 'epoch': '0.4357'}
+{'loss': '3.234', 'grad_norm': '0.954', 'learning_rate': '0.0001476', 'epoch': '0.4575'}
+{'loss': '3.204', 'grad_norm': '5.734', 'learning_rate': '0.0001451', 'epoch': '0.4793'}
+{'loss': '3.256', 'grad_norm': '0.7998', 'learning_rate': '0.0001425', 'epoch': '0.5011'}
+{'loss': '3.178', 'grad_norm': '1.652', 'learning_rate': '0.0001401', 'epoch': '0.5229'}
+{'loss': '3.199', 'grad_norm': '0.7909', 'learning_rate': '0.0001376', 'epoch': '0.5447'}
+{'loss': '3.152', 'grad_norm': '1.173', 'learning_rate': '0.0001351', 'epoch': '0.5664'}
+{'loss': '3.176', 'grad_norm': '0.6287', 'learning_rate': '0.0001325', 'epoch': '0.5882'}
+{'loss': '3.164', 'grad_norm': '0.7571', 'learning_rate': '0.0001301', 'epoch': '0.61'}
+{'loss': '3.194', 'grad_norm': '1.151', 'learning_rate': '0.0001276', 'epoch': '0.6318'}
+{'loss': '3.131', 'grad_norm': '0.7843', 'learning_rate': '0.0001251', 'epoch': '0.6536'}
+{'loss': '3.193', 'grad_norm': '0.8536', 'learning_rate': '0.0001225', 'epoch': '0.6754'}
+{'loss': '3.196', 'grad_norm': '0.892', 'learning_rate': '0.00012', 'epoch': '0.6972'}
+{'loss': '3.161', 'grad_norm': '0.7288', 'learning_rate': '0.0001176', 'epoch': '0.719'}
+{'loss': '3.149', 'grad_norm': '0.8507', 'learning_rate': '0.0001151', 'epoch': '0.7407'}
+{'loss': '3.147', 'grad_norm': '1.679', 'learning_rate': '0.0001125', 'epoch': '0.7625'}
+{'loss': '3.103', 'grad_norm': '0.7039', 'learning_rate': '0.0001101', 'epoch': '0.7843'}
+{'loss': '3.169', 'grad_norm': '1.043', 'learning_rate': '0.0001076', 'epoch': '0.8061'}
+{'loss': '3.078', 'grad_norm': '0.7168', 'learning_rate': '0.0001051', 'epoch': '0.8279'}
+{'loss': '3.128', 'grad_norm': '0.6574', 'learning_rate': '0.0001026', 'epoch': '0.8497'}
+{'loss': '3.111', 'grad_norm': '0.6139', 'learning_rate': '0.0001001', 'epoch': '0.8715'}
+{'loss': '3.158', 'grad_norm': '0.8763', 'learning_rate': '9.758e-05', 'epoch': '0.8932'}
+{'loss': '3.098', 'grad_norm': '1.492', 'learning_rate': '9.508e-05', 'epoch': '0.915'}
+{'loss': '3.167', 'grad_norm': '1.419', 'learning_rate': '9.258e-05', 'epoch': '0.9368'}
+{'loss': '3.057', 'grad_norm': '0.8946', 'learning_rate': '9.008e-05', 'epoch': '0.9586'}
+{'loss': '3.11', 'grad_norm': '1.147', 'learning_rate': '8.758e-05', 'epoch': '0.9804'}
+{'loss': '3.086', 'grad_norm': '1.065', 'learning_rate': '8.508e-05', 'epoch': '1.002'}
+{'loss': '2.996', 'grad_norm': '1.644', 'learning_rate': '8.258e-05', 'epoch': '1.024'}
+{'loss': '2.999', 'grad_norm': '0.8515', 'learning_rate': '8.007e-05', 'epoch': '1.046'}
+{'loss': '2.961', 'grad_norm': '0.9955', 'learning_rate': '7.758e-05', 'epoch': '1.068'}
+{'loss': '2.993', 'grad_norm': '1.271', 'learning_rate': '7.508e-05', 'epoch': '1.089'}
+{'loss': '2.997', 'grad_norm': '1.181', 'learning_rate': '7.258e-05', 'epoch': '1.111'}
+{'loss': '2.937', 'grad_norm': '0.8507', 'learning_rate': '7.007e-05', 'epoch': '1.133'}
+{'loss': '2.99', 'grad_norm': '0.8983', 'learning_rate': '6.758e-05', 'epoch': '1.155'}
+{'loss': '3.017', 'grad_norm': '0.8222', 'learning_rate': '6.508e-05', 'epoch': '1.176'}
+{'loss': '3.01', 'grad_norm': '0.7855', 'learning_rate': '6.258e-05', 'epoch': '1.198'}
+{'loss': '3.02', 'grad_norm': '0.7991', 'learning_rate': '6.008e-05', 'epoch': '1.22'}
+{'loss': '3.009', 'grad_norm': '0.9104', 'learning_rate': '5.758e-05', 'epoch': '1.242'}
+{'loss': '2.983', 'grad_norm': '0.7991', 'learning_rate': '5.507e-05', 'epoch': '1.264'}
+{'loss': '3.007', 'grad_norm': '1.58', 'learning_rate': '5.258e-05', 'epoch': '1.285'}
+{'loss': '2.998', 'grad_norm': '1.184', 'learning_rate': '5.008e-05', 'epoch': '1.307'}
+{'loss': '2.984', 'grad_norm': '1.116', 'learning_rate': '4.758e-05', 'epoch': '1.329'}
+{'loss': '2.965', 'grad_norm': '1.468', 'learning_rate': '4.51e-05', 'epoch': '1.351'}
+{'loss': '3.006', 'grad_norm': '1.296', 'learning_rate': '4.26e-05', 'epoch': '1.373'}
+{'loss': '2.978', 'grad_norm': '0.764', 'learning_rate': '4.01e-05', 'epoch': '1.394'}
+{'loss': '2.98', 'grad_norm': '1.157', 'learning_rate': '3.76e-05', 'epoch': '1.416'}
+{'loss': '2.968', 'grad_norm': '0.8065', 'learning_rate': '3.51e-05', 'epoch': '1.438'}
+{'loss': '2.971', 'grad_norm': '0.862', 'learning_rate': '3.26e-05', 'epoch': '1.46'}
+{'loss': '3.041', 'grad_norm': '1.859', 'learning_rate': '3.01e-05', 'epoch': '1.481'}
+{'loss': '2.926', 'grad_norm': '1.027', 'learning_rate': '2.76e-05', 'epoch': '1.503'}
+{'loss': '2.953', 'grad_norm': '1.965', 'learning_rate': '2.51e-05', 'epoch': '1.525'}
+{'loss': '2.972', 'grad_norm': '1.195', 'learning_rate': '2.26e-05', 'epoch': '1.547'}
+{'loss': '3.057', 'grad_norm': '0.7469', 'learning_rate': '2.01e-05', 'epoch': '1.569'}
+{'loss': '2.99', 'grad_norm': '0.9455', 'learning_rate': '1.76e-05', 'epoch': '1.59'}
+{'loss': '3.009', 'grad_norm': '0.9714', 'learning_rate': '1.51e-05', 'epoch': '1.612'}
+{'loss': '2.957', 'grad_norm': '0.7104', 'learning_rate': '1.263e-05', 'epoch': '1.634'}
+{'loss': '2.983', 'grad_norm': '1.031', 'learning_rate': '1.013e-05', 'epoch': '1.656'}
+{'loss': '2.989', 'grad_norm': '0.91', 'learning_rate': '7.625e-06', 'epoch': '1.678'}
+{'loss': '2.93', 'grad_norm': '1.511', 'learning_rate': '5.125e-06', 'epoch': '1.699'}
+{'loss': '2.952', 'grad_norm': '4.906', 'learning_rate': '2.625e-06', 'epoch': '1.721'}
+{'loss': '2.973', 'grad_norm': '0.8804', 'learning_rate': '1.25e-07', 'epoch': '1.743'}
+{'train_runtime': '1571', 'train_samples_per_second': '40.73', 'train_steps_per_second': '5.091', 'train_loss': '3.132', 'epoch': '1.743'}
+Finished lora
