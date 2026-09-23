@@ -1,12 +1,13 @@
 #!/bin/bash
 # Eval LoRA / ReLoRA / SuperReLoRa final_model on Zhores (SLURM).
 # Submit from repo root (home clone):
-#   mkdir -p logs
-#   sbatch scripts/eval_zhores.sbatch
+#   bash scripts/submit_zhores_eval.sh
+#   # or point at a run:
+#   RUN_ID=20260923_j8472336 sbatch --export=ALL,RUN_ID scripts/eval_zhores.sbatch
 #
-# Code:  $SLURM_SUBMIT_DIR  (home)
-# Runs:  /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/runs/{method}/final_model
-# Writes: .../runs/{method}/metrics.json
+# Reads:  .../runs/<RUN_ID>/{method}/final_model
+# Writes: .../runs/<RUN_ID>/{method}/metrics.json
+# RUN_ID defaults to contents of .../runs/LATEST
 
 #SBATCH -J eval_srl
 #SBATCH -p gpu_devel
@@ -37,13 +38,26 @@ set +u
 conda activate "${CONDA_ENV}"
 set -u
 
+if [[ -z "${RUN_ID:-}" ]]; then
+  if [[ -f "${PROJECT_ROOT}/runs/LATEST" ]]; then
+    RUN_ID="$(tr -d '[:space:]' < "${PROJECT_ROOT}/runs/LATEST")"
+  else
+    echo "ERROR: RUN_ID not set and ${PROJECT_ROOT}/runs/LATEST missing"
+    exit 1
+  fi
+fi
+
 METHODS=(lora relora superrelora)
 METHOD="${METHODS[$SLURM_ARRAY_TASK_ID]}"
-RUN_DIR="${PROJECT_ROOT}/runs/${METHOD}"
+RUN_DIR="${PROJECT_ROOT}/runs/${RUN_ID}/${METHOD}"
+# Legacy flat layout fallback (pre-timestamp runs)
+if [[ ! -d "${RUN_DIR}" ]] && [[ -d "${PROJECT_ROOT}/runs/${METHOD}" ]]; then
+  RUN_DIR="${PROJECT_ROOT}/runs/${METHOD}"
+fi
 FINAL_DIR="${RUN_DIR}/final_model"
 METRICS_OUT="${RUN_DIR}/metrics.json"
 
-# Idempotent only if FORCE is unset; delete metrics.json to re-eval after fixes.
+# Idempotent only if FORCE is unset; FORCE=1 to overwrite.
 if [[ -z "${FORCE:-}" ]] && [[ -f "${METRICS_OUT}" ]]; then
   echo "Skip ${METHOD}: ${METRICS_OUT} exists (FORCE=1 to overwrite)"
   exit 0
@@ -54,7 +68,6 @@ if [[ ! -d "${FINAL_DIR}" ]] && [[ ! -f "${RUN_DIR}/final_model.pt" ]]; then
   exit 1
 fi
 
-# Prefer Trainer dir; fall back to .pt from manual train
 if [[ -d "${FINAL_DIR}" ]]; then
   WEIGHT="${FINAL_DIR}"
 elif [[ -f "${RUN_DIR}/final_model.pt" ]]; then
@@ -64,6 +77,7 @@ else
   exit 1
 fi
 
+echo "RUN_ID=${RUN_ID}"
 echo "method=${METHOD}"
 echo "WEIGHT=${WEIGHT}"
 echo "METRICS_OUT=${METRICS_OUT}"
@@ -80,4 +94,4 @@ python scripts/eval_superrelora.py \
   --max_length 128 \
   --num_samples 1000
 
-echo "Finished eval ${METHOD}"
+echo "Finished eval ${METHOD} (RUN_ID=${RUN_ID})"

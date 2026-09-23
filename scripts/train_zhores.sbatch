@@ -1,8 +1,13 @@
 #!/bin/bash
 # SuperReLoRa / ReLoRA / LoRA training on Zhores (SLURM).
 # Submit from repo root (home clone):
-#   mkdir -p logs
-#   sbatch scripts/train_zhores.sbatch
+#   bash scripts/submit_zhores.sh
+#   # or:
+#   RUN_ID=$(date +%Y%m%d_%H%M%S) sbatch --export=ALL,RUN_ID scripts/train_zhores.sbatch
+#
+# Outputs:
+#   /gpfs/.../SuperReLoRa/runs/<RUN_ID>/{lora,relora,superrelora}/
+#   /gpfs/.../SuperReLoRa/runs/LATEST  -> text file with RUN_ID
 #
 # Code:  $SLURM_SUBMIT_DIR  (home)
 # Data:  /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/{hf_cache,runs}
@@ -36,12 +41,23 @@ set +u
 conda activate "${CONDA_ENV}"
 set -u
 
+# Shared stamp for the whole array: prefer explicit RUN_ID, else job array id.
+if [[ -z "${RUN_ID:-}" ]]; then
+  if [[ -n "${SLURM_ARRAY_JOB_ID:-}" ]]; then
+    RUN_ID="$(date +%Y%m%d)_j${SLURM_ARRAY_JOB_ID}"
+  else
+    RUN_ID="$(date +%Y%m%d_%H%M%S)_j${SLURM_JOB_ID}"
+  fi
+fi
+# Persist for eval / notebook (same for every array task).
+echo "${RUN_ID}" > "${PROJECT_ROOT}/runs/LATEST"
+
 METHODS=(lora relora superrelora)
 METHOD="${METHODS[$SLURM_ARRAY_TASK_ID]}"
-OUT_DIR="${PROJECT_ROOT}/runs/${METHOD}"
+OUT_DIR="${PROJECT_ROOT}/runs/${RUN_ID}/${METHOD}"
 CONFIG="${REPO_ROOT}/training_configs/${METHOD}_160m.yaml"
 
-# Idempotent resubmit
+# Idempotent resubmit within this RUN_ID only
 if [[ -f "${OUT_DIR}/DONE" ]]; then
   echo "Skip ${METHOD}: ${OUT_DIR}/DONE exists"
   exit 0
@@ -53,6 +69,7 @@ if [[ -f "${OUT_DIR}/final_model.pt" ]] || [[ -d "${OUT_DIR}/final_model" ]]; th
 fi
 
 mkdir -p "${OUT_DIR}"
+echo "RUN_ID=${RUN_ID}"
 echo "method=${METHOD}"
 echo "REPO_ROOT=${REPO_ROOT}"
 echo "HF_HOME=${HF_HOME}"
@@ -75,4 +92,4 @@ python scripts/train_superrelora.py \
   --resume_from_checkpoint auto
 
 touch "${OUT_DIR}/DONE"
-echo "Finished ${METHOD}"
+echo "Finished ${METHOD} (RUN_ID=${RUN_ID})"
