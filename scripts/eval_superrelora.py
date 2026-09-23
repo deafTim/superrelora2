@@ -1,16 +1,19 @@
+import json
+import math
 import os
+import argparse
+
 import torch
-import torch.nn as nn
-from transformers import AutoModelForCausalLM, AutoTokenizer
 from datasets import load_dataset
 from tqdm import tqdm
-import math
-import argparse
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
 from src.superrelora_model import SuperReLoRaModel
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Evaluate SuperReLoRA / ReLoRA model')
-    parser.add_argument('--model_path', type=str, required=True, help='Path to model checkpoint')
+    parser.add_argument('--model_path', type=str, required=True, help='Path to model checkpoint or final_model dir')
     parser.add_argument('--dataset_name', type=str, default='Salesforce/wikitext', help='Dataset name')
     parser.add_argument('--dataset_config', type=str, default='wikitext-2-raw-v1', help='Dataset config')
     parser.add_argument('--batch_size', type=int, default=8, help='Batch size')
@@ -23,7 +26,48 @@ def parse_args():
         choices=['superrelora', 'relora', 'lora'],
         help='Must match training method (orthogonal_reinit on/off)',
     )
+    parser.add_argument(
+        '--metrics_out',
+        type=str,
+        default=None,
+        help='Optional path to write metrics.json',
+    )
     return parser.parse_args()
+
+
+def resolve_weight_file(model_path: str) -> str:
+    """Accept a .bin/.pt/.safetensors file or a Trainer save directory."""
+    if os.path.isfile(model_path):
+        return model_path
+    if not os.path.isdir(model_path):
+        raise FileNotFoundError(f"model_path not found: {model_path}")
+    for name in (
+        "model.safetensors",
+        "pytorch_model.bin",
+        "model.bin",
+        "pytorch_model.pt",
+    ):
+        candidate = os.path.join(model_path, name)
+        if os.path.isfile(candidate):
+            return candidate
+    raise FileNotFoundError(
+        f"No weight file in {model_path} (expected model.safetensors or pytorch_model.bin)"
+    )
+
+
+def load_state_dict(path: str, map_location):
+    path = resolve_weight_file(path)
+    print(f"Loading weights from: {path}")
+    if path.endswith(".safetensors"):
+        from safetensors.torch import load_file
+
+        return load_file(path, device="cpu")
+    checkpoint = torch.load(path, map_location=map_location)
+    if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
+        return checkpoint["model_state_dict"]
+    if isinstance(checkpoint, dict) and "state_dict" in checkpoint:
+        return checkpoint["state_dict"]
+    return checkpoint
 
 def compute_perplexity(model, dataloader, device):
     model.eval()
@@ -159,15 +203,12 @@ def main():
         orthogonal_reinit=(args.method == "superrelora"),
     )
     
-    # Load checkpoint (raw state_dict or wrapped dict)
-    checkpoint = torch.load(args.model_path, map_location=device)
-    if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
-        state_dict = checkpoint["model_state_dict"]
-    else:
-        state_dict = checkpoint
+    # Load checkpoint (dir with safetensors/bin, or raw .pt/.bin)
+    state_dict = load_state_dict(args.model_path, map_location="cpu")
     print("Checkpoint keys:", list(state_dict.keys())[:10])
     print("Model state_dict keys:", list(model.state_dict().keys())[:10])
-    model.load_state_dict(state_dict, strict=False)
+    missing, unexpected = model.load_state_dict(state_dict, strict=False)
+    print(f"load_state_dict: missing={len(missing)} unexpected={len(unexpected)}")
     model = model.to(device)
     
     # Load and prepare dataset
@@ -201,10 +242,33 @@ def main():
     # Compute metrics
     print("Computing metrics...")
     loss, perplexity, accuracy = compute_perplexity(model, dataloader, device)
-    print(f"\nSuperReLoRA Model Metrics:")
+    print(f"\n{args.method} Model Metrics:")
     print(f"Loss: {loss:.4f}")
     print(f"Perplexity: {perplexity:.2f}")
     print(f"Accuracy: {accuracy:.4f}")
+
+    metrics_out = args.metrics_out
+    if metrics_out is None:
+        # If model_path is .../runs/<method>/final_model, write sibling metrics.json
+        parent = os.path.dirname(os.path.abspath(args.model_path.rstrip(os.sep)))
+        if os.path.basename(args.model_path.rstrip(os.sep)) == "final_model":
+            metrics_out = os.path.join(parent, "metrics.json")
+    if metrics_out:
+        payload = {
+            "method": args.method,
+            "loss": float(loss),
+            "perplexity": float(perplexity),
+            "accuracy": float(accuracy),
+            "val_ppl": float(perplexity),
+            "val_acc": float(accuracy),
+            "num_samples": int(args.num_samples),
+            "max_length": int(args.max_length),
+            "model_path": args.model_path,
+        }
+        os.makedirs(os.path.dirname(os.path.abspath(metrics_out)) or ".", exist_ok=True)
+        with open(metrics_out, "w") as f:
+            json.dump(payload, f, indent=2)
+        print(f"Wrote metrics: {metrics_out}")
     
     # Generate example texts
     print("\nGenerating example texts:")
