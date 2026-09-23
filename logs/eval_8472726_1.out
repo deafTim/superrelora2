@@ -1,0 +1,54 @@
+method=relora
+WEIGHT=/gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/runs/relora/final_model
+METRICS_OUT=/gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/runs/relora/metrics.json
+HF_HOME=/gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
+Wed Sep 23 16:20:04 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.163.01             Driver Version: 550.163.01     CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce GTX 1080 Ti     Off |   00000000:02:00.0 Off |                  N/A |
+| 21%   28C    P8              9W /  250W |       0MiB /  11264MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+HF cache: /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/hf_cache
+Loading model and tokenizer...
+Loading weights from: /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/runs/relora/final_model/model.safetensors
+Skipping 84 orthonormal basis buffers (.U) for eval load
+Checkpoint keys: ['model.lm_head.weight', 'model.model.embed_tokens.weight', 'model.model.layers.0.input_layernorm.weight', 'model.model.layers.0.mlp.down_proj.lora_A.weight', 'model.model.layers.0.mlp.down_proj.lora_B.weight', 'model.model.layers.0.mlp.down_proj.weight', 'model.model.layers.0.mlp.gate_proj.lora_A.weight', 'model.model.layers.0.mlp.gate_proj.lora_B.weight', 'model.model.layers.0.mlp.gate_proj.weight', 'model.model.layers.0.mlp.up_proj.lora_A.weight']
+Model state_dict keys: ['model.model.embed_tokens.weight', 'model.model.layers.0.self_attn.q_proj.weight', 'model.model.layers.0.self_attn.q_proj.U', 'model.model.layers.0.self_attn.q_proj.lora_A.weight', 'model.model.layers.0.self_attn.q_proj.lora_B.weight', 'model.model.layers.0.self_attn.k_proj.weight', 'model.model.layers.0.self_attn.k_proj.U', 'model.model.layers.0.self_attn.k_proj.lora_A.weight', 'model.model.layers.0.self_attn.k_proj.lora_B.weight', 'model.model.layers.0.self_attn.v_proj.weight']
+load_state_dict: missing=84 unexpected=0
+Loading dataset...
+Computing metrics...
+
+Evaluation complete! tokens=78731 correct=32879
+
+relora Model Metrics:
+Loss: 3.2513
+Perplexity: 25.82
+Accuracy: 0.4176
+Wrote metrics: /gpfs/gpfs0/timofey.glukhikh/SuperReLoRa/runs/relora/metrics.json
+
+Generating example texts:
+
+Prompt: Once upon a time
+Generated: Once upon a time , his life was married by him for the next year . After the birth of her female fishing she was born in December 2004 and affected her second
+
+Prompt: The most important thing about
+Generated: The most important thing about the same time for the first half of the church was to be a good way , but it was not a lottery . However , he used some birth , and says that " he is
+
+Prompt: In the future, artificial intelligence will
+Generated: In the future, artificial intelligence will be found by his time to make a different spectator of who are not produced in the computer . 
+ The characteristics and a reason to have also been used for things
+Finished eval relora
